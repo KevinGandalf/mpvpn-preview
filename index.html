@@ -180,20 +180,9 @@ h2{font-size:1.4rem}
 </div>
 
 <h2>Architecture</h2>
-<pre>
-Client ──&gt; TUN ──&gt; gVisor netstack ──&gt; [Rules] ──&gt; [Balancer] ──&gt; WireGuard Uplinks
-                        │                                              │
-                     DNS Cache                                    Health Probe
-                     (RFC-compliant)                              (RTT, Failover)
-
-Admin UI (:8443) ──&gt; SQLite ──&gt; Live-Apply ──&gt; Rules Engine
-
-Ramdisk:
-  Boot ──&gt; LUKS USB ──&gt; XChaCha20 Vault ──&gt; RAM ──&gt; Run ──&gt; Re-encrypt
-
-Obfuscation:
-  Client ──&gt; WSS/TLS (:443) ──&gt; Looks like HTTPS ──&gt; WireGuard
-</pre>
+<figure>
+<img src="docs/architecture.png" alt="MPVPN Architecture">
+</figure>
 
 <h2>Technical Specs</h2>
 <table>
