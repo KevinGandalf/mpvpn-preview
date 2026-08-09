@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MPVPN – Multi-Path WireGuard VPN</title>
+<meta name="description" content="Self-hosted multi-path WireGuard load-balancer. Automatic failover, intelligent balancing, zero-log architecture.">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:#000;color:#e2e8f0;line-height:1.7}
+a{color:#38bdf8;text-decoration:none}
+a:hover{text-decoration:underline}
+img{max-width:100%;border-radius:12px;border:1px solid #1e293b}
+
+.container{max-width:900px;margin:0 auto;padding:3rem 2rem}
+
+/* Hero */
+.hero{text-align:center;padding:5rem 2rem 4rem}
+.hero img.logo{width:280px;border:none;border-radius:0;margin-bottom:2rem}
+.hero h1{font-size:1.2rem;color:#94a3b8;font-weight:400;margin-bottom:1rem}
+.hero .tagline{font-size:1.6rem;font-weight:700;color:#fff;margin-bottom:2rem;line-height:1.3}
+.badge-row{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-bottom:2.5rem}
+.badge-row span{padding:.35rem .75rem;background:#111827;border:1px solid #1e293b;border-radius:999px;font-size:.8rem;color:#94a3b8}
+.coming{display:inline-block;padding:.75rem 2rem;background:linear-gradient(135deg,#38bdf8,#818cf8);color:#000;font-weight:700;font-size:1rem;border-radius:10px;margin-top:1rem}
+
+/* Sections */
+h2{font-size:1.8rem;font-weight:700;color:#fff;margin:3rem 0 1.5rem;padding-top:2rem;border-top:1px solid #1e293b}
+h3{font-size:1.2rem;color:#38bdf8;margin:2rem 0 1rem}
+p{color:#94a3b8;margin-bottom:1rem}
+
+/* Screenshots */
+.screenshots{display:grid;gap:2rem;margin:2rem 0}
+.screenshots figure{margin:0}
+.screenshots figcaption{font-size:.85rem;color:#64748b;margin-top:.5rem;text-align:center}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.9rem}
+th,td{padding:.6rem .8rem;text-align:left;border-bottom:1px solid #1e293b}
+th{color:#64748b;font-size:.75rem;text-transform:uppercase;font-weight:500}
+td{color:#cbd5e1}
+
+/* Pricing */
+.editions{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin:2rem 0}
+.edition{background:#0f172a;border:1px solid #1e293b;border-radius:16px;padding:2rem}
+.edition.pro{border-color:#38bdf8;box-shadow:0 0 30px rgba(56,189,248,.08)}
+.edition h4{font-size:1.1rem;margin-bottom:.5rem;color:#fff}
+.edition .price{font-size:2rem;font-weight:800;color:#38bdf8;margin:.5rem 0}
+.edition .price span{font-size:.9rem;color:#64748b;font-weight:400}
+.edition ul{list-style:none;margin-top:1rem}
+.edition li{padding:.3rem 0;font-size:.85rem;color:#94a3b8}
+.edition li::before{content:"\2713 ";color:#22c55e;font-weight:700}
+.edition li.no::before{content:"\2717 ";color:#ef4444}
+
+/* Architecture */
+pre{background:#0f172a;border:1px solid #1e293b;border-radius:10px;padding:1.5rem;overflow-x:auto;font-size:.8rem;color:#94a3b8;line-height:1.5}
+
+/* Footer */
+footer{text-align:center;padding:3rem 2rem;color:#475569;font-size:.85rem;border-top:1px solid #1e293b;margin-top:3rem}
+
+@media(max-width:768px){
+.hero .tagline{font-size:1.2rem}
+.editions{grid-template-columns:1fr}
+h2{font-size:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+<img src="docs/logo.png" alt="MPVPN Logo" class="logo">
+<h1>Multi-Path WireGuard VPN Load-Balancer</h1>
+<p class="tagline">Distribute traffic across multiple tunnels.<br>Automatic failover. Zero logs. Pure RAM.</p>
+<div class="badge-row">
+<span>XChaCha20-Poly1305</span>
+<span>WireGuard</span>
+<span>RAM-only Mode</span>
+<span>6 Strategies</span>
+<span>Zero-Log</span>
+</div>
+<span class="coming">Coming Soon</span>
+</section>
+
+<div class="container">
+
+<h2>Screenshots</h2>
+
+<div class="screenshots">
+<figure>
+<img src="docs/screenshot-landing.png" alt="Landing Page">
+<figcaption>Landing Page – Features, Pricing, Payment Methods</figcaption>
+</figure>
+<figure>
+<img src="docs/screenshot-dashboard.png" alt="Dashboard">
+<figcaption>VPN Dashboard – Live Metrics, Uplink Status, Traffic</figcaption>
+</figure>
+<figure>
+<img src="docs/screenshot-checkout.png" alt="Checkout">
+<figcaption>Checkout – PGP Key Generation in Browser, 6 Payment Methods</figcaption>
+</figure>
+<figure>
+<img src="docs/screenshot-portal.png" alt="Customer Portal">
+<figcaption>Customer Portal – License Key Download, Order History, Activation Guide</figcaption>
+</figure>
+<figure>
+<img src="docs/screenshot-admin.png" alt="Admin Panel">
+<figcaption>Admin Panel – Order Management, Manual Approval, Revenue Stats</figcaption>
+</figure>
+<figure>
+<img src="docs/screenshot-transparency.png" alt="Transparency">
+<figcaption>Transparency Page – Zero-Log Policy, Verifiable, Warrant Canary</figcaption>
+</figure>
+</div>
+
+<h2>Features</h2>
+
+<h3>Networking & Load Balancing</h3>
+<table>
+<tr><td><strong>Multi-Path Tunneling</strong></td><td>2-10+ WireGuard tunnels simultaneously</td></tr>
+<tr><td><strong>6 Strategies</strong></td><td>Sticky, WRR, Least Connections, Lowest RTT, Failover, Bandwidth-Aware</td></tr>
+<tr><td><strong>Auto Failover</strong></td><td>Dead tunnel detected in seconds, traffic shifts seamlessly</td></tr>
+<tr><td><strong>Policy Routing</strong></td><td>Route by domain wildcard, IP CIDR, port, protocol</td></tr>
+<tr><td><strong>Connection Limits</strong></td><td>Global + per-uplink caps with idle timeouts</td></tr>
+<tr><td><strong>Hot-Reload</strong></td><td>SIGHUP reloads rules without restart</td></tr>
+</table>
+
+<h3>Security & Privacy</h3>
+<table>
+<tr><td><strong>Zero-Log</strong></td><td>No IPs, no user-agents, no access logs – enforced in code</td></tr>
+<tr><td><strong>DPI Obfuscation</strong></td><td>WebSocket/TLS wrapper, VPN looks like HTTPS</td></tr>
+<tr><td><strong>Config Encryption</strong></td><td>AES-256-GCM + Argon2id at rest</td></tr>
+<tr><td><strong>Ramdisk Mode</strong></td><td>Run in RAM only – power off = gone</td></tr>
+<tr><td><strong>Double-Layer Vault</strong></td><td>LUKS (AES-256-XTS) + XChaCha20-Poly1305</td></tr>
+<tr><td><strong>Forensically Secure</strong></td><td>No persistent storage anywhere</td></tr>
+</table>
+
+<h3>Admin & Payments</h3>
+<table>
+<tr><td><strong>HTTPS Web-UI</strong></td><td>Modern dark-theme admin panel</td></tr>
+<tr><td><strong>Anonymous Accounts</strong></td><td>PGP key auth – no email needed</td></tr>
+<tr><td><strong>Crypto Payments</strong></td><td>BTC, XMR, LTC, ETH (BTCPay, 0% fees)</td></tr>
+<tr><td><strong>Traditional</strong></td><td>Stripe, PayPal, Paysafe, Amazon</td></tr>
+<tr><td><strong>Machine-Bound License</strong></td><td>1 key = 1 machine (transferable)</td></tr>
+<tr><td><strong>Customer Portal</strong></td><td>Re-download key, view orders</td></tr>
+</table>
+
+<h2>Editions</h2>
+<div class="editions">
+<div class="edition">
+<h4>Community</h4>
+<div class="price">Free</div>
+<p style="color:#64748b;font-size:.85rem">MIT License, forever</p>
+<ul>
+<li>Unlimited uplinks</li>
+<li>All 6 strategies</li>
+<li>DNS cache + routing</li>
+<li>Health probing + failover</li>
+<li>Hot-reload + Prometheus</li>
+<li>Static binary</li>
+<li class="no">No Web-UI (CLI only)</li>
+<li class="no">No encryption</li>
+<li class="no">No obfuscation</li>
+</ul>
+</div>
+<div class="edition pro">
+<h4>Pro</h4>
+<div class="price">&euro;4.99<span>/month</span></div>
+<p style="color:#64748b;font-size:.85rem">or &euro;39/year &bull; &euro;99 lifetime</p>
+<ul>
+<li>Everything in Community</li>
+<li>HTTPS Admin Web-UI</li>
+<li>Config encryption</li>
+<li>DPI obfuscation</li>
+<li>Ramdisk vault mode</li>
+<li>SQLite + audit log</li>
+<li>Automatic updates</li>
+<li>Priority support</li>
+</ul>
+</div>
+</div>
+
+<h2>Architecture</h2>
+<pre>
+Client ──&gt; TUN ──&gt; gVisor netstack ──&gt; [Rules] ──&gt; [Balancer] ──&gt; WireGuard Uplinks
+                        │                                              │
+                     DNS Cache                                    Health Probe
+                     (RFC-compliant)                              (RTT, Failover)
+
+Admin UI (:8443) ──&gt; SQLite ──&gt; Live-Apply ──&gt; Rules Engine
+
+Ramdisk:
+  Boot ──&gt; LUKS USB ──&gt; XChaCha20 Vault ──&gt; RAM ──&gt; Run ──&gt; Re-encrypt
+
+Obfuscation:
+  Client ──&gt; WSS/TLS (:443) ──&gt; Looks like HTTPS ──&gt; WireGuard
+</pre>
+
+<h2>Technical Specs</h2>
+<table>
+<tr><td>Language</td><td>Go</td></tr>
+<tr><td>VPN</td><td>WireGuard (wireguard-go)</td></tr>
+<tr><td>Network Stack</td><td>gVisor netstack (userspace)</td></tr>
+<tr><td>Vault Encryption</td><td>XChaCha20-Poly1305 + Argon2id</td></tr>
+<tr><td>Disk Encryption</td><td>LUKS2 AES-256-XTS</td></tr>
+<tr><td>License Signing</td><td>Ed25519</td></tr>
+<tr><td>TLS</td><td>Let's Encrypt (autocert)</td></tr>
+<tr><td>OS</td><td>Linux (Alpine, Debian, Ubuntu)</td></tr>
+<tr><td>Arch</td><td>x86_64, aarch64</td></tr>
+</table>
+
+</div>
+
+<footer>
+<p>&copy; 2025 MPVPN &bull; Self-hosted. Open-core. Privacy-first.</p>
+<p style="margin-top:.5rem"><a href="https://mpvpn.dev">mpvpn.dev</a></p>
+</footer>
+
+</body>
+</html>

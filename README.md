@@ -12,7 +12,7 @@ No logs. No traces. Pure RAM.
 
 ### 🚀 Coming Soon
 
-**[mpvpn.net](https://mpvpn.net)**
+**[mpvpn.dev](https://mpvpn.dev)**
 
 ---
 
@@ -198,7 +198,7 @@ Verifiable: check `X-Privacy: zero-log` response header on any request.
 
 ```bash
 # Community is running? Upgrade in 30 seconds:
-curl -sSL https://mpvpn.net/upgrade.sh | sudo bash
+curl -sSL https://mpvpn.dev/upgrade.sh | sudo bash
 
 # Your config stays the same. Uplinks resume immediately.
 ```
@@ -209,7 +209,7 @@ curl -sSL https://mpvpn.net/upgrade.sh | sudo bash
 
 **Self-hosted. Open-core. Privacy-first.**
 
-**[mpvpn.net](https://mpvpn.net)**
+**[mpvpn.dev](https://mpvpn.dev)**
 
 © 2025 MPVPN
 
