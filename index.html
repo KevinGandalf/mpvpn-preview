@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MPVPN – Multi-Path WireGuard VPN</title>
-<meta name="description" content="Self-hosted multi-path WireGuard load-balancer. Automatic failover, intelligent balancing, zero-log architecture.">
+<title>MPVPN – Multi-Path VPN Gateway</title>
+<meta name="description" content="Self-hosted multi-path WireGuard and OpenVPN gateway: several tunnels at once, failover, leak protection, post-quantum, runs from RAM.">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -17,11 +17,12 @@ img{max-width:100%;border-radius:12px;border:1px solid #1e293b}
 
 /* Hero */
 .hero{text-align:center;padding:5rem 2rem 4rem}
-.hero img.logo{width:280px;border:none;border-radius:0;margin-bottom:2rem}
+.hero img.logo{width:140px;border:none;border-radius:0;margin-bottom:2rem}
 .hero h1{font-size:1.2rem;color:#94a3b8;font-weight:400;margin-bottom:1rem}
 .hero .tagline{font-size:1.6rem;font-weight:700;color:#fff;margin-bottom:2rem;line-height:1.3}
 .badge-row{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-bottom:2.5rem}
 .badge-row span{padding:.35rem .75rem;background:#111827;border:1px solid #1e293b;border-radius:999px;font-size:.8rem;color:#94a3b8}
+.btn{display:inline-block;padding:.75rem 2rem;border:1px solid #38bdf8;color:#38bdf8;font-weight:700;border-radius:10px;margin:1rem .5rem 0}
 .coming{display:inline-block;padding:.75rem 2rem;background:linear-gradient(135deg,#38bdf8,#818cf8);color:#000;font-weight:700;font-size:1rem;border-radius:10px;margin-top:1rem}
 
 /* Sections */
@@ -69,97 +70,110 @@ h2{font-size:1.4rem}
 
 <section class="hero">
 <img src="docs/logo.png" alt="MPVPN Logo" class="logo">
-<h1>Multi-Path WireGuard VPN Load-Balancer</h1>
-<p class="tagline">Distribute traffic across multiple tunnels.<br>Automatic failover. Zero logs. Pure RAM.</p>
+<h1>Multi-Path WireGuard &amp; OpenVPN Gateway</h1>
+<p class="tagline">Several VPN tunnels at once.<br>Automatic failover. Leak-proof. Runs from RAM.</p>
 <div class="badge-row">
-<span>XChaCha20-Poly1305</span>
-<span>WireGuard</span>
-<span>RAM-only Mode</span>
-<span>6 Strategies</span>
-<span>Zero-Log</span>
+<span>WireGuard + OpenVPN</span>
+<span>ML-KEM post-quantum</span>
+<span>Kill switch</span>
+<span>RAM-only appliance</span>
+<span>Signed &amp; reproducible</span>
 </div>
-<span class="coming">Coming Soon</span>
+<a class="coming" href="https://github.com/KevinGandalf/mpvpn-preview/releases/latest">Download</a>
+<a class="btn" href="#editions">Editions</a>
 </section>
 
 <div class="container">
 
-<h2>Screenshots</h2>
+<h2>What is MPVPN?</h2>
+<p>MPVPN is a self-hosted VPN gateway for your home or office network. It sends every connection through one of several VPN tunnels – from the same or different providers (Mullvad, NordVPN, IVPN, Surfshark, Proton, your own VPS …). If a tunnel fails, traffic moves on within seconds. Nothing leaves your network outside a tunnel.</p>
+<p>One static Go binary with userspace WireGuard and a native OpenVPN client, on Alpine Linux – or as a stateless boot image entirely from RAM.</p>
 
-<div class="screenshots">
-<figure>
-<img src="docs/screenshot-landing.png" alt="Landing Page">
-<figcaption>Landing Page – Features, Pricing, Payment Methods</figcaption>
-</figure>
-<figure>
-<img src="docs/screenshot-dashboard.png" alt="Dashboard">
-<figcaption>VPN Dashboard – Live Metrics, Uplink Status, Traffic</figcaption>
-</figure>
-<figure>
-<img src="docs/screenshot-checkout.png" alt="Checkout">
-<figcaption>Checkout – PGP Key Generation in Browser, 6 Payment Methods</figcaption>
-</figure>
-<figure>
-<img src="docs/screenshot-portal.png" alt="Customer Portal">
-<figcaption>Customer Portal – License Key Download, Order History, Activation Guide</figcaption>
-</figure>
-<figure>
-<img src="docs/screenshot-admin.png" alt="Admin Panel">
-<figcaption>Admin Panel – Order Management, Manual Approval, Revenue Stats</figcaption>
-</figure>
-<figure>
-<img src="docs/screenshot-transparency.png" alt="Transparency">
-<figcaption>Transparency Page – Zero-Log Policy, Verifiable, Warrant Canary</figcaption>
-</figure>
-</div>
+<h2>Download</h2>
+<p>Programs and boot images are free to download from the <a href="https://github.com/KevinGandalf/mpvpn-preview/releases">releases</a> – built reproducibly, boot-tested and signed (Ed25519). The VPN core runs without a license; Pro features need one.</p>
+<table>
+<tr><td><strong>mpvpn-x86_64.iso</strong></td><td>USB stick, CD, KVM/QEMU/Proxmox (BIOS + UEFI)</td></tr>
+<tr><td><strong>mpvpn-x86_64.qcow2</strong></td><td>KVM disk image</td></tr>
+<tr><td><strong>vmlinuz / initramfs / ipxe</strong></td><td>PXE network boot</td></tr>
+<tr><td><strong>mpvpn-pro-linux-amd64</strong></td><td>normal installation (Alpine, Debian, Ubuntu, Alma/Rocky)</td></tr>
+<tr><td><strong>mpvpn-obfs</strong></td><td>Mac/Linux client for obfuscation</td></tr>
+<tr><td><strong>SHA256SUMS, signatures, SBOM</strong></td><td>verify before use</td></tr>
+</table>
 
 <h2>Features</h2>
-
-<h3>Networking & Load Balancing</h3>
+<h3>Multipath &amp; Routing</h3>
 <table>
-<tr><td><strong>Multi-Path Tunneling</strong></td><td>2-10+ WireGuard tunnels simultaneously</td></tr>
-<tr><td><strong>6 Strategies</strong></td><td>Sticky, WRR, Least Connections, Lowest RTT, Failover, Bandwidth-Aware</td></tr>
-<tr><td><strong>Auto Failover</strong></td><td>Dead tunnel detected in seconds, traffic shifts seamlessly</td></tr>
-<tr><td><strong>Policy Routing</strong></td><td>Route by domain wildcard, IP CIDR, port, protocol</td></tr>
-<tr><td><strong>Connection Limits</strong></td><td>Global + per-uplink caps with idle timeouts</td></tr>
-<tr><td><strong>Hot-Reload</strong></td><td>SIGHUP reloads rules without restart</td></tr>
+<tr><td><strong>Multi-path tunnels</strong></td><td>Any number of WireGuard and OpenVPN uplinks at once</td></tr>
+<tr><td><strong>6 strategies</strong></td><td>Sticky, WRR, least connections, lowest RTT, failover, bandwidth-aware</td></tr>
+<tr><td><strong>Health checks</strong></td><td>RTT probes; dead tunnels drop out in seconds and come back automatically</td></tr>
+<tr><td><strong>Rules</strong></td><td>Domain wildcards, IP/CIDR, port, protocol</td></tr>
+<tr><td><strong>Split DNS</strong></td><td>Templates, DNS cache with IP→name mapping, auto-refreshed lists</td></tr>
+<tr><td><strong>Import</strong></td><td>.conf (WireGuard) and .ovpn (OpenVPN) from your provider</td></tr>
+<tr><td><strong>Gateway mode</strong></td><td>Default gateway with its own DHCP server, or next to your router</td></tr>
+</table>
+<h3>Leak Protection</h3>
+<table>
+<tr><td><strong>Kill switch</strong></td><td>nftables: nothing leaves the LAN outside a tunnel</td></tr>
+<tr><td><strong>DNS through the tunnel</strong></td><td>Port 53 captured, DoT/DoH to third parties blocked</td></tr>
+<tr><td><strong>IPv6 off</strong></td><td>Kernel + sysctl</td></tr>
+<tr><td><strong>Leak self-test</strong></td><td>WAN IP vs. exit IP of every tunnel, kill switch, tunnel DNS</td></tr>
+</table>
+<h3>Post-Quantum</h3>
+<table>
+<tr><td><strong>WireGuard + ML-KEM-1024</strong></td><td>Mullvad ephemeral peer, detected automatically</td></tr>
+<tr><td><strong>OpenVPN hybrid TLS</strong></td><td>X25519MLKEM768 in the control channel</td></tr>
+<tr><td><strong>Backups</strong></td><td>age with post-quantum recipients</td></tr>
+</table>
+<h3>Privacy &amp; Fingerprint</h3>
+<table>
+<tr><td><strong>Rotation (Pro)</strong></td><td>Switch tunnels and servers from a pool, manual or scheduled with jitter, grouped by provider</td></tr>
+<tr><td><strong>Network fingerprint</strong></td><td>Random WAN MAC, neutral DHCP identity, uniform TTL</td></tr>
+<tr><td><strong>Obfuscation (Pro)</strong></td><td>WireGuard over TLS/WebSocket on 443 to your own relay – looks like HTTPS</td></tr>
+<tr><td><strong>Mac client</strong></td><td>mpvpn-obfs: the WireGuard app on a Mac, tunnelled as HTTPS</td></tr>
+<tr><td><strong>No logs</strong></td><td>Logs and audit only in RAM, memory locked, no core dumps</td></tr>
+</table>
+<h3>RAM-Disk Appliance (Pro)</h3>
+<table>
+<tr><td><strong>Stateless</strong></td><td>Runs entirely from RAM, no swap, no disk writes</td></tr>
+<tr><td><strong>LUKS USB key</strong></td><td>Config on an encrypted stick, open only for seconds</td></tr>
+<tr><td><strong>Network vault</strong></td><td>Or an encrypted vault on a web server / KVM disk</td></tr>
+<tr><td><strong>Verified boot</strong></td><td>Signed hashes of kernel and initramfs checked before unlocking</td></tr>
+<tr><td><strong>Boot media</strong></td><td>ISO, USB, qcow2, PXE/iPXE from one build</td></tr>
+</table>
+<h3>Emergency (Pro)</h3>
+<table>
+<tr><td><strong>Panic button</strong></td><td>Dashboard, shell or knock: lock down or wipe</td></tr>
+<tr><td><strong>USB pull</strong></td><td>Removing the key ends the session</td></tr>
+<tr><td><strong>Duress passphrase</strong></td><td>Wipes instead of unlocking</td></tr>
+<tr><td><strong>Dead-man switch</strong></td><td>Wipe when you stop checking in</td></tr>
+<tr><td><strong>Paranoid mode</strong></td><td>Kept alive by knocks that look like failed IMAP/SMTP/DNS logins</td></tr>
+</table>
+<h3>Administration (Pro)</h3>
+<table>
+<tr><td><strong>Web interface</strong></td><td>HTTPS :8443, German and English</td></tr>
+<tr><td><strong>2FA</strong></td><td>TOTP and WebAuthn/passkeys</td></tr>
+<tr><td><strong>Live apply</strong></td><td>Immediate, with automatic rollback</td></tr>
+<tr><td><strong>Remote access</strong></td><td>Management WireGuard: admin UI/SSH from outside only through an own tunnel, QR per device</td></tr>
+<tr><td><strong>Shell</strong></td><td>Every setting via mpvpn-pro -get/-set or the config file</td></tr>
+<tr><td><strong>Signed updates</strong></td><td>Notice in UI/CLI/login, optional auto-update with rollback watchdog</td></tr>
+<tr><td><strong>Supply chain</strong></td><td>Reproducible builds, pinned dependencies, govulncheck, SBOM, offline root key</td></tr>
 </table>
 
-<h3>Security & Privacy</h3>
-<table>
-<tr><td><strong>Zero-Log</strong></td><td>No IPs, no user-agents, no access logs – enforced in code</td></tr>
-<tr><td><strong>DPI Obfuscation</strong></td><td>WebSocket/TLS wrapper, VPN looks like HTTPS</td></tr>
-<tr><td><strong>Config Encryption</strong></td><td>AES-256-GCM + Argon2id at rest</td></tr>
-<tr><td><strong>Ramdisk Mode</strong></td><td>Run in RAM only – power off = gone</td></tr>
-<tr><td><strong>Double-Layer Vault</strong></td><td>LUKS (AES-256-XTS) + XChaCha20-Poly1305</td></tr>
-<tr><td><strong>Forensically Secure</strong></td><td>No persistent storage anywhere</td></tr>
-</table>
-
-<h3>Admin & Payments</h3>
-<table>
-<tr><td><strong>HTTPS Web-UI</strong></td><td>Modern dark-theme admin panel</td></tr>
-<tr><td><strong>Anonymous Accounts</strong></td><td>PGP key auth – no email needed</td></tr>
-<tr><td><strong>Crypto Payments</strong></td><td>BTC, XMR, LTC, ETH (BTCPay, 0% fees)</td></tr>
-<tr><td><strong>Traditional</strong></td><td>Stripe, PayPal, Paysafe, Amazon</td></tr>
-<tr><td><strong>Machine-Bound License</strong></td><td>1 key = 1 machine (transferable)</td></tr>
-<tr><td><strong>Customer Portal</strong></td><td>Re-download key, view orders</td></tr>
-</table>
-
-<h2>Editions</h2>
+<h2 id="editions">Editions</h2>
 <div class="editions">
 <div class="edition">
 <h4>Community</h4>
 <div class="price">Free</div>
-<p style="color:#64748b;font-size:.85rem">MIT License, forever</p>
+<p style="color:#64748b;font-size:.85rem">VPN core, unlimited tunnels</p>
 <ul>
-<li>Unlimited uplinks</li>
-<li>All 6 strategies</li>
-<li>DNS cache + routing</li>
-<li>Health probing + failover</li>
-<li>Hot-reload + Prometheus</li>
-<li>Static binary</li>
-<li class="no">No Web-UI (CLI only)</li>
-<li class="no">No encryption</li>
-<li class="no">No obfuscation</li>
+<li>WireGuard multipath, all strategies</li>
+<li>Rules, split DNS, lists</li>
+<li>Kill switch, DNS/IPv6 leak protection</li>
+<li>Post-quantum WireGuard (Mullvad)</li>
+<li>Network fingerprint, config vault</li>
+<li>Shell configuration</li>
+<li class="no">No web interface</li>
+<li class="no">No OpenVPN, RAM-disk, obfuscation</li>
 </ul>
 </div>
 <div class="edition pro">
@@ -168,40 +182,44 @@ h2{font-size:1.4rem}
 <p style="color:#64748b;font-size:.85rem">Pricing announced at launch</p>
 <ul>
 <li>Everything in Community</li>
-<li>HTTPS Admin Web-UI</li>
-<li>Config encryption</li>
-<li>DPI obfuscation</li>
-<li>Ramdisk vault mode</li>
-<li>SQLite + audit log</li>
-<li>Automatic updates</li>
-<li>Priority support</li>
+<li>Web interface with 2FA, live apply</li>
+<li>OpenVPN uplinks (post-quantum TLS)</li>
+<li>RAM-disk appliance + emergency functions</li>
+<li>Obfuscation + Mac client</li>
+<li>Rotation</li>
+<li>Remote access via management WireGuard</li>
+<li>Signed updates, backups</li>
 </ul>
 </div>
 </div>
+<p>The number of tunnels is never limited. A license is bound to one device and can be moved.</p>
 
 <h2>Architecture</h2>
 <figure>
 <img src="docs/architecture.png" alt="MPVPN Architecture">
 </figure>
+<pre>LAN client ─▶ TUN ─▶ netstack ─▶ DNS ─▶ Rules ─▶ Balancer
+     ├─▶ WireGuard uplink (PQ: ML-KEM-1024)
+     ├─▶ WireGuard uplink (obfuscated: WSS/443)
+     └─▶ OpenVPN uplink   (PQ: X25519MLKEM768)   … any number
+Kill switch (nftables): nothing leaves outside a tunnel</pre>
 
-<h2>Technical Specs</h2>
+<h2>Platforms</h2>
 <table>
-<tr><td>Language</td><td>Go</td></tr>
-<tr><td>VPN</td><td>WireGuard (wireguard-go)</td></tr>
-<tr><td>Network Stack</td><td>gVisor netstack (userspace)</td></tr>
-<tr><td>Vault Encryption</td><td>XChaCha20-Poly1305 + Argon2id</td></tr>
-<tr><td>Disk Encryption</td><td>LUKS2 AES-256-XTS</td></tr>
-<tr><td>License Signing</td><td>Ed25519</td></tr>
-<tr><td>TLS</td><td>Let's Encrypt (autocert)</td></tr>
-<tr><td>OS</td><td>Linux (Alpine, Debian, Ubuntu)</td></tr>
-<tr><td>Arch</td><td>x86_64, aarch64</td></tr>
+<tr><td>Alpine Linux</td><td>reference platform (OpenRC)</td></tr>
+<tr><td>RAM-disk image</td><td>Alpine-based, x86_64</td></tr>
+<tr><td>Debian 13, Ubuntu 24.04, Alma/Rocky 10</td><td>tested, mpvpn-hostcheck adjusts the host</td></tr>
+<tr><td>Requirements</td><td>/dev/net/tun, nftables, iproute2 – 1 vCPU, 512 MB RAM</td></tr>
 </table>
+
+<h2>Coming Next</h2>
+<p>Censorship-resistant transports (Hysteria2, VLESS + Reality, Shadowsocks-2022, CDN fronting), AmneziaWG, post-quantum for more providers, a post-quantum PSK service on your own VPS.</p>
 
 </div>
 
 <footer>
-<p>&copy; 2026 MPVPN &bull; Self-hosted. Open-core. Privacy-first.</p>
-<p style="margin-top:.5rem"><a href="https://mpvpn.dev">mpvpn.dev</a></p>
+<p>&copy; 2026 MPVPN &bull; Self-hosted. Multipath. Privacy-first.</p>
+<p style="margin-top:.5rem"><a href="https://mpvpn.dev">mpvpn.dev</a> &bull; <a href="https://github.com/KevinGandalf/mpvpn-preview/releases">Releases</a></p>
 </footer>
 
 </body>

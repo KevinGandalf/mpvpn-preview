@@ -2,215 +2,189 @@
 
 # MPVPN
 
-### Multi-Path WireGuard VPN Load-Balancer
+### Multi-Path WireGuard & OpenVPN Gateway
 
-**Distribute traffic across multiple WireGuard tunnels.**<br>
-Automatic failover. Intelligent load balancing. Military-grade encryption.<br>
-No logs. No traces. Pure RAM.
-
----
-
-### 🚀 Coming Soon
-
-**[mpvpn.dev](https://mpvpn.dev)**
+**Spread your traffic across several VPN tunnels at once.**<br>
+Automatic failover. Leak-proof by design. Post-quantum where providers allow it.<br>
+Runs from RAM – power off and nothing is left.
 
 ---
+
+**[mpvpn.dev](https://mpvpn.dev)** · **[Download](https://github.com/KevinGandalf/mpvpn-preview/releases/latest)**
 
 </div>
 
-## Screenshots
-
-### Landing Page
-![Landing Page](docs/screenshot-landing.png)
-
-### MPVPN Dashboard (Status & Metrics)
-![Dashboard](docs/screenshot-dashboard.png)
-
-### Checkout (Email or PGP Anonymous + Payment)
-![Checkout](docs/screenshot-checkout.png)
-
-### Customer Portal (License Key + Orders)
-![Customer Portal](docs/screenshot-portal.png)
-
-### Admin Panel (Order Management)
-![Admin Panel](docs/screenshot-admin.png)
-
-### Transparency (Zero-Log Policy)
-![Transparency](docs/screenshot-transparency.png)
-
----
-
 ## What is MPVPN?
 
-MPVPN is a self-hosted, userspace multi-path WireGuard VPN load-balancer. It distributes outgoing traffic across multiple VPN tunnels simultaneously – giving you redundancy, speed, and privacy in one package.
+MPVPN is a self-hosted VPN gateway for your home or office network. It sits between your
+LAN and the internet and sends every connection through one of several VPN tunnels – from
+the same or from different providers (Mullvad, NordVPN, IVPN, Surfshark, Proton, your own
+VPS …). If a tunnel fails, traffic moves on to the others within seconds. Nothing leaves
+your network outside a tunnel.
 
-Everything runs in userspace (gVisor netstack + wireguard-go). No kernel modules, no nftables, no fwmark hacks. Just a single static binary.
+It is a single static Go binary (userspace WireGuard and a native OpenVPN client, gVisor
+netstack) and runs on Alpine Linux – or as a stateless boot image entirely from RAM.
 
----
+## Download
+
+Programs and boot images are free to download from the
+[releases](https://github.com/KevinGandalf/mpvpn-preview/releases). Every release is
+built reproducibly, boot-tested and signed (Ed25519).
+
+| File | Use |
+|---|---|
+| `mpvpn-x86_64.iso` | CD/DVD, `dd` to a USB stick, KVM/QEMU/Proxmox (BIOS + UEFI) |
+| `mpvpn-x86_64.qcow2` | KVM disk image |
+| `vmlinuz-mpvpn` + `initramfs-mpvpn`, `mpvpn.ipxe` | PXE/iPXE network boot |
+| `mpvpn-pro-linux-amd64` | program for a normal installation (Alpine, Debian, Ubuntu, Alma/Rocky) |
+| `mpvpn-obfs-<os>-<arch>` | Mac/Linux client: WireGuard as HTTPS to your own relay |
+| `mpvpn-knock-<os>-<arch>` | knock tool for the Paranoid mode |
+| `SHA256SUMS(.sig)`, `BOOTSUMS(.sig)`, `manifest.json(.sig)`, `*.cdx.json` | checksums, signatures, update manifest, SBOM |
+
+```sh
+sha256sum -c SHA256SUMS    # then check SHA256SUMS.sig with the published release key
+```
+
+The VPN core runs without a license (Community). The Pro features below need a license –
+the program and the image check it.
 
 ## Features
 
-### Networking & Load Balancing
+### Multipath & routing
 
 | Feature | Description |
-|---------|-------------|
-| **Multi-Path Tunneling** | Route traffic across 2-10+ WireGuard tunnels simultaneously |
-| **6 Balancing Strategies** | Sticky, Weighted Round-Robin, Least Connections, Lowest RTT, Failover, Bandwidth-Aware |
-| **Automatic Failover** | Dead tunnel detected in seconds, traffic shifts seamlessly |
-| **Automatic Failback** | Recovered uplinks immediately receive new connections |
-| **Policy Routing** | Route by domain (wildcard), IP CIDR, port, protocol |
-| **Connection Limits** | Configurable global + per-uplink caps with idle timeouts |
-| **Hot-Reload** | Change rules without restarting (SIGHUP) |
+|---|---|
+| **Multi-path tunnels** | any number of WireGuard and OpenVPN uplinks at the same time |
+| **6 balancing strategies** | sticky, weighted round-robin, least connections, lowest RTT, failover, bandwidth-aware |
+| **Health checks** | probes with RTT (EWMA); dead tunnels drop out in seconds, recover automatically |
+| **Rules** | by domain (wildcards), IP/CIDR, port, protocol – e.g. `*.example.de` → German tunnel |
+| **Split DNS** | templates for streaming, banking, LAN names; DNS cache with IP→name mapping |
+| **Lists** | ready-made domain/IP lists, refreshed automatically |
+| **Import** | `.conf` (WireGuard) and `.ovpn` (OpenVPN) files from your provider |
+| **Gateway mode** | MPVPN as default gateway with its own DHCP server, or next to your router |
 
-### DNS
-
-| Feature | Description |
-|---------|-------------|
-| **Hybrid DNS** | Tunnel DNS for matched rules, local DNSCrypt otherwise |
-| **DNS Cache** | TTL-based in-memory cache (background eviction) |
-| **RFC-Compliant** | Full DNS parsing (EDNS, CNAME, pointers) |
-| **Domain-Based Routing** | `*.netflix.com` → NL tunnel, `*.work.com` → DE tunnel |
-
-### Security & Privacy
+### Leak protection
 
 | Feature | Description |
-|---------|-------------|
-| **Zero-Log Architecture** | No IPs, no user-agents, no access logs – enforced in code |
-| **DPI-Resistant Obfuscation** | WebSocket/TLS wrapper makes VPN look like HTTPS |
-| **Config Encryption** | AES-256-GCM + Argon2id for secrets at rest |
-| **Ramdisk Mode** | Run entirely in RAM – power off = everything gone |
-| **Double-Layer Vault** | LUKS (AES-256-XTS) + XChaCha20-Poly1305 encrypted state |
-| **Forensically Secure** | No persistent storage, encrypted external vault only |
-| **Warrant Canary** | Monthly updated transparency statement |
+|---|---|
+| **Kill switch** | nftables: nothing leaves the LAN outside a tunnel, also during restarts |
+| **DNS only through the tunnel** | all port 53 traffic captured, DoT/DoH to third parties blocked |
+| **IPv6 off** | disabled in kernel and sysctl – no IPv6 leaks |
+| **Leak self-test** | one click: WAN IP vs. exit IP of every tunnel, kill switch and tunnel DNS |
 
-### Admin Web-UI (Pro)
+### Post-quantum
 
 | Feature | Description |
-|---------|-------------|
-| **HTTPS Admin Panel** | Modern dark-theme interface on configurable port |
-| **Password Auth** | bcrypt, session cookies, auto-lockout after 5 attempts |
-| **Uplink Management** | Add/edit/delete WireGuard connections via browser |
-| **Rules Editor** | Create routing rules with priority ordering |
-| **Live Metrics** | Real-time traffic, RTT, active connections per uplink |
-| **Audit Log** | Full change history (who/what/when) |
-| **Prometheus /metrics** | Grafana-ready monitoring |
-| **Live-Apply** | Changes take effect immediately, no restart needed |
-| **License Activation** | Activate Pro via Web-UI (paste key or upload file) |
+|---|---|
+| **WireGuard + ML-KEM-1024** | Mullvad ephemeral peer, detected and used automatically |
+| **OpenVPN hybrid TLS** | X25519MLKEM768 in the TLS control channel where the server supports it |
+| **Encrypted backups** | age with post-quantum recipients (ML-KEM-768 + X25519) |
 
-### Deployment Options
-
-| Mode | Description |
-|------|-------------|
-| **Bare-Metal** | Static binary + systemd, any Linux |
-| **Alpine Ramdisk** | Stateless encrypted OS, boots from USB/SD |
-| **KVM / QEMU** | VM with encrypted virtio disk |
-| **Network Boot** | PXE/iPXE with vault fetched via HTTPS |
-
-### Payment & Accounts
+### Privacy & fingerprint
 
 | Feature | Description |
-|---------|-------------|
-| **Anonymous Accounts** | PGP key generated in browser – no email required |
-| **Crypto Payments** | Bitcoin, Monero, Litecoin, Ethereum (BTCPay, 0% fees) |
-| **Traditional Payments** | Stripe (card/SEPA), PayPal |
-| **Anonymous Payments** | Paysafe, Amazon gift cards (manual approval) |
-| **Machine-Bound License** | 1 key = 1 machine (transferable via CLI) |
-| **Customer Portal** | Re-download key, view orders, transfer license |
-| **Offline Grace** | 30 days without internet, then graceful fallback |
+|---|---|
+| **Rotation** (Pro) | switch active tunnels and WireGuard servers from a pool, by hand or on a schedule with jitter; group by provider |
+| **Network fingerprint** | random WAN MAC address, neutral DHCP identity, uniform TTL |
+| **Obfuscation** (Pro) | WireGuard over TLS/WebSocket on port 443 to your own relay – looks like HTTPS; mode `auto` falls back from UDP |
+| **Mac client** | `mpvpn-obfs`: the official WireGuard app on a Mac, tunnelled as HTTPS |
+| **No logs** | logs and audit only in RAM, memory locked, no core dumps |
 
----
+### RAM-disk appliance (Pro)
+
+| Feature | Description |
+|---|---|
+| **Stateless** | the whole system runs from RAM; no swap, no writes to any disk |
+| **LUKS USB key** | configuration on an encrypted stick, opened only for seconds at boot and when saving |
+| **Network vault** | alternatively an encrypted vault on a web server or KVM disk |
+| **Verified boot files** | signed hashes of kernel and initramfs checked before unlocking |
+| **Boot media** | ISO (USB/CD), qcow2, PXE/iPXE from one build |
+
+### Emergency (Pro)
+
+| Feature | Description |
+|---|---|
+| **Panic button** | dashboard, shell or knock: lock down or wipe immediately |
+| **USB pull** | removing the key ends the session |
+| **Duress passphrase** | a second passphrase that wipes instead of unlocking |
+| **Dead-man switch** | wipe when you stop checking in |
+| **Paranoid mode** | dead-man switch kept alive by knocks that look like failed IMAP/SMTP/DNS logins |
+
+### Administration (Pro)
+
+| Feature | Description |
+|---|---|
+| **Web interface** | HTTPS on port 8443, dark theme, German and English |
+| **Login** | bcrypt, lockout, 2FA with TOTP and WebAuthn/passkeys |
+| **Live apply** | changes take effect at once, with automatic rollback if the box loses its tunnels |
+| **Remote access** | optional management WireGuard: admin UI and SSH from outside only through an own tunnel, keys per device with QR code |
+| **Everything from the shell** | every setting also via `mpvpn-pro -get/-set` or the config file |
+| **Signed updates** | update notice in UI, CLI and login; optional auto-update with rollback watchdog |
+| **Backups** | encrypted with age, to file or download |
+
+### Supply chain
+
+Reproducible builds (same commit → same SHA-256), pinned dependencies and GitHub actions,
+`govulncheck` on every build, CycloneDX SBOM for every binary, offline root signing key
+with short-lived CI subkeys.
 
 ## Editions
 
 | | **Community** | **Pro** |
 |---|:---:|:---:|
-| **Price** | Free (MIT) | €4.99/mo · €39/yr · €99 lifetime |
-| Unlimited uplinks | ✅ | ✅ |
-| All 6 strategies | ✅ | ✅ |
-| DNS cache + routing | ✅ | ✅ |
-| Health probing + failover | ✅ | ✅ |
-| Hot-reload (SIGHUP) | ✅ | ✅ |
-| Prometheus metrics | ✅ | ✅ |
-| Static binary | ✅ | ✅ |
-| HTTPS Admin Web-UI | ❌ | ✅ |
-| Config encryption | ❌ | ✅ |
-| DPI obfuscation | ❌ | ✅ |
-| Ramdisk vault mode | ❌ | ✅ |
-| SQLite + audit log | ❌ | ✅ |
-| Automatic updates | ❌ | ✅ |
-| Priority support | ❌ | ✅ |
+| Price | free | announced at launch |
+| WireGuard multipath, all strategies, rules, split DNS | ✅ | ✅ |
+| Kill switch, DNS/IPv6 leak protection | ✅ | ✅ |
+| Post-quantum WireGuard (Mullvad) | ✅ | ✅ |
+| Network fingerprint, config vault | ✅ | ✅ |
+| Shell configuration | ✅ | ✅ |
+| **Web interface** (2FA, live apply, updates, backups) | – | ✅ |
+| **OpenVPN uplinks** (incl. post-quantum TLS) | – | ✅ |
+| **RAM-disk appliance** (LUKS key, emergency functions) | – | ✅ |
+| **Obfuscation** + Mac client | – | ✅ |
+| **Rotation** | – | ✅ |
+| **Remote access** via management WireGuard | – | ✅ |
 
----
+The number of tunnels is never limited. A license is bound to one device and can be moved.
+
+## Platforms
+
+| System | Support |
+|---|---|
+| **Alpine Linux** | reference platform (OpenRC) |
+| RAM-disk image | Alpine-based, x86_64 |
+| Debian 13, Ubuntu 24.04, AlmaLinux/Rocky 10 | tested; `mpvpn-hostcheck` adjusts systemd-resolved and sudo |
+
+Needs `/dev/net/tun`, `nftables` and `iproute2`. 1 vCPU and 512 MB RAM are enough.
 
 ## Architecture
 
 ```
-Client ──> TUN ──> gVisor netstack ──> [Rules] ──> [Balancer] ──> WireGuard Uplinks
-                        │                                              │
-                     DNS Cache                                    Health Probe
-                     (RFC-compliant)                              (RTT, Failover)
+LAN client ─▶ TUN ─▶ gVisor netstack ─▶ DNS (cache, split DNS) ─▶ Rules ─▶ Balancer
+                                                                               │
+              ┌────────────────────┬──────────────────────┬────────────────────┘
+              ▼                    ▼                      ▼
+        WireGuard uplink     WireGuard uplink       OpenVPN uplink        … any number
+        (PQ: ML-KEM-1024)    (obfuscated: WSS/443)  (PQ: X25519MLKEM768)
+              └──────── Kill switch (nftables) – nothing leaves outside a tunnel ────────
 
-Admin UI (:8443) ──> SQLite ──> Live-Apply ──> Rules Engine
-
-Ramdisk:
-  Boot ──> LUKS USB ──> XChaCha20 Vault ──> RAM ──> Run ──> Shutdown ──> Re-encrypt
-
-Obfuscation:
-  Client ──> WSS/TLS (:443) ──> Looks like HTTPS ──> WireGuard inside
+RAM-disk:  Boot ─▶ verify boot files ─▶ unlock LUKS key ─▶ load vault into RAM ─▶ run
 ```
 
----
+## Coming next
 
-## Zero-Log Transparency
-
-| Data | Collected? |
-|------|-----------|
-| IP Address | **NEVER** (stripped in middleware) |
-| User-Agent | **NEVER** (header deleted) |
-| Access Logs | **NEVER** (no log files) |
-| Tracking Cookies | **NEVER** (functional session only) |
-| Browser Fingerprint | **NEVER** (no JS fingerprinting) |
-| Third-party Trackers | **NEVER** (no analytics) |
-
-Verifiable: check `X-Privacy: zero-log` response header on any request.
-
----
-
-## Technical Specifications
-
-| Component | Technology |
-|-----------|-----------|
-| Language | Go |
-| VPN | WireGuard (wireguard-go) |
-| Network Stack | gVisor netstack (userspace) |
-| DNS | miekg/dns |
-| Database | SQLite (pure Go, no CGO) |
-| Vault Encryption | XChaCha20-Poly1305 + Argon2id |
-| Disk Encryption | LUKS2 AES-256-XTS |
-| License Signing | Ed25519 |
-| TLS | Let's Encrypt (autocert) |
-| OS | Linux (Alpine, Debian, Ubuntu) |
-| Architecture | x86_64, aarch64 |
-
----
-
-## Upgrade Path
-
-```bash
-# Community is running? Upgrade in 30 seconds:
-curl -sSL https://mpvpn.dev/upgrade.sh | sudo bash
-
-# Your config stays the same. Uplinks resume immediately.
-```
+Censorship-resistant transports (Hysteria2, VLESS + Reality, Shadowsocks-2022, CDN fronting),
+AmneziaWG, post-quantum for more providers (NordVPN, IVPN, Windscribe), a post-quantum PSK
+service on your own VPS.
 
 ---
 
 <div align="center">
 
-**Self-hosted. Open-core. Privacy-first.**
+**Self-hosted. Multipath. Privacy-first.**
 
 **[mpvpn.dev](https://mpvpn.dev)**
 
-© 2025 MPVPN
+© 2026 MPVPN
 
 </div>
