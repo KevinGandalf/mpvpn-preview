@@ -147,6 +147,10 @@ with short-lived CI subkeys.
 
 The number of tunnels is never limited. A license is bound to one device and can be moved.
 
+Privacy-respecting licensing: the periodic check sends only a machine ID and the program's own
+checksum – never your traffic, DNS or browsing. Because every release is reproducible and
+signed, that checksum can be verified against the public release.
+
 ## Platforms
 
 | System | Support |
