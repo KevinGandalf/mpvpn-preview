@@ -73,7 +73,7 @@ h2{font-size:1.4rem}
 <h1>Multi-Path WireGuard &amp; OpenVPN Gateway</h1>
 <p class="tagline">Several VPN tunnels at once.<br>Automatic failover. Leak-proof. Runs from RAM.</p>
 <div class="badge-row">
-<span>WireGuard + OpenVPN</span>
+<span>WireGuard + OpenVPN + IPsec</span>
 <span>ML-KEM post-quantum</span>
 <span>Kill switch</span>
 <span>RAM-only appliance</span>
@@ -103,12 +103,13 @@ h2{font-size:1.4rem}
 <h2>Features</h2>
 <h3>Multipath &amp; Routing</h3>
 <table>
-<tr><td><strong>Multi-path tunnels</strong></td><td>Any number of WireGuard and OpenVPN uplinks at once</td></tr>
+<tr><td><strong>Multi-path tunnels</strong></td><td>Any number of WireGuard, OpenVPN and IPsec/IKEv2 uplinks at once</td></tr>
 <tr><td><strong>6 strategies</strong></td><td>Sticky, WRR, least connections, lowest RTT, failover, bandwidth-aware</td></tr>
 <tr><td><strong>Health checks</strong></td><td>RTT probes; dead tunnels drop out in seconds and come back automatically</td></tr>
 <tr><td><strong>Rules</strong></td><td>Domain wildcards, IP/CIDR, port, protocol</td></tr>
 <tr><td><strong>Split DNS</strong></td><td>Templates, DNS cache with IP→name mapping, auto-refreshed lists</td></tr>
 <tr><td><strong>Import</strong></td><td>.conf (WireGuard) and .ovpn (OpenVPN) from your provider</td></tr>
+<tr><td><strong>IPsec/IKEv2</strong></td><td>Router logins of providers without WireGuard export (e.g. AdGuard VPN) – IKEv2 and ESP run inside MPVPN, no strongSwan; form with connection test</td></tr>
 <tr><td><strong>Gateway mode</strong></td><td>Default gateway with its own DHCP server, or next to your router</td></tr>
 </table>
 <h3>Leak Protection</h3>
@@ -184,6 +185,7 @@ h2{font-size:1.4rem}
 <li>Everything in Community</li>
 <li>Web interface with 2FA, live apply</li>
 <li>OpenVPN uplinks (post-quantum TLS)</li>
+<li>IPsec/IKEv2 uplinks (e.g. AdGuard VPN)</li>
 <li>RAM-disk appliance + emergency functions</li>
 <li>Obfuscation + Mac client</li>
 <li>Rotation</li>
