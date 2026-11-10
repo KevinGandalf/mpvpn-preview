@@ -106,7 +106,9 @@ h2{font-size:1.4rem}
 <tr><td><strong>Multi-path tunnels</strong></td><td>Any number of WireGuard, OpenVPN and IPsec/IKEv2 uplinks at once</td></tr>
 <tr><td><strong>6 strategies</strong></td><td>Sticky, WRR, least connections, lowest RTT, failover, bandwidth-aware</td></tr>
 <tr><td><strong>Health checks</strong></td><td>RTT probes; dead tunnels drop out in seconds and come back automatically</td></tr>
-<tr><td><strong>Rules</strong></td><td>Domain wildcards, IP/CIDR, port, protocol</td></tr>
+<tr><td><strong>Rules</strong></td><td>Domain wildcards, IP/CIDR, port, protocol, client/network</td></tr>
+<tr><td><strong>VLANs</strong></td><td>802.1Q VLANs with their own tunnels each (e.g. VLAN 10 → NordVPN, VLAN 20 → Mullvad), DNS through the same tunnels, own DHCP server, admin-only VLANs, isolation</td></tr>
+<tr><td><strong>Network page</strong></td><td>Every device of the LAN and the VLANs as map and table – names, vendor, device type, which tunnels it used; RAM only, history can be switched off</td></tr>
 <tr><td><strong>Split DNS</strong></td><td>Templates, DNS cache with IP→name mapping, auto-refreshed lists</td></tr>
 <tr><td><strong>Import</strong></td><td>.conf (WireGuard) and .ovpn (OpenVPN) from your provider</td></tr>
 <tr><td><strong>IPsec/IKEv2</strong></td><td>Router logins of providers without WireGuard export (e.g. AdGuard VPN) – IKEv2 and ESP run inside MPVPN, no strongSwan; form with connection test</td></tr>
@@ -169,6 +171,7 @@ h2{font-size:1.4rem}
 <ul>
 <li>WireGuard multipath, all strategies</li>
 <li>Rules, split DNS, lists</li>
+<li>VLANs with own tunnels and DHCP</li>
 <li>Kill switch, DNS/IPv6 leak protection</li>
 <li>Post-quantum WireGuard (Mullvad)</li>
 <li>Network fingerprint, config vault</li>
@@ -190,6 +193,7 @@ h2{font-size:1.4rem}
 <li>Obfuscation + Mac client</li>
 <li>Rotation</li>
 <li>Remote access via management WireGuard</li>
+<li>Network page: devices as map and table, VLAN editor</li>
 <li>Signed updates, backups</li>
 </ul>
 </div>
