@@ -62,6 +62,7 @@ the program and the image check it.
 | **VLANs** (Pro) | 802.1Q VLANs, each with its own tunnels (e.g. VLAN 10 → NordVPN, VLAN 20 → Mullvad; dropped, not rerouted, when they are down), DNS through the same tunnels, own DHCP server, admin-only VLANs, isolation |
 | **Split DNS** | templates for streaming, banking, LAN names; DNS cache with IP→name mapping |
 | **Lists** | ready-made domain/IP lists, refreshed automatically |
+| **Provider assistant** (Pro) | log in at NordVPN or PIA, pick country, city and servers – uplinks are created and PIA keys renewed automatically; Proton via its router configs |
 | **Import** | `.conf` (WireGuard) and `.ovpn` (OpenVPN) files from your provider |
 | **Gateway mode** | MPVPN as default gateway with its own DHCP server, or next to your router |
 
@@ -120,7 +121,7 @@ the program and the image check it.
 | **Login** | bcrypt, lockout, 2FA with TOTP and WebAuthn/passkeys |
 | **Live apply** | changes take effect at once, with automatic rollback if the box loses its tunnels |
 | **Remote access** | optional management WireGuard: admin UI and SSH from outside only through an own tunnel, keys per device with QR code |
-| **Network page** | every device of the LAN and the VLANs as map and table: names (DHCP, mDNS, NetBIOS), vendor, device type, tunnels used; RAM only, discovery, scan and history each switchable off |
+| **Network page** | every device of the LAN and the VLANs as map, table and gateway star (which devices bypass the VPN via the router): names (DHCP, mDNS, NetBIOS), vendor, device type, tunnels used; RAM only, discovery, scan and history each switchable off |
 | **Everything from the shell** | every setting also via `mpvpn-pro -get/-set` or the config file |
 | **Signed updates** | update notice in UI, CLI and login; optional auto-update with rollback watchdog |
 | **Backups** | encrypted with age, to file or download |
