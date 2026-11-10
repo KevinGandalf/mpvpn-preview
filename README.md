@@ -59,7 +59,7 @@ the program and the image check it.
 | **6 balancing strategies** | sticky, weighted round-robin, least connections, lowest RTT, failover, bandwidth-aware |
 | **Health checks** | probes with RTT (EWMA); dead tunnels drop out in seconds, recover automatically |
 | **Rules** | by domain (wildcards), IP/CIDR, port, protocol, client or network – e.g. `*.example.de` → German tunnel |
-| **VLANs** | 802.1Q VLANs, each with its own tunnels (e.g. VLAN 10 → NordVPN, VLAN 20 → Mullvad; dropped, not rerouted, when they are down), DNS through the same tunnels, own DHCP server, admin-only VLANs, isolation |
+| **VLANs** (Pro) | 802.1Q VLANs, each with its own tunnels (e.g. VLAN 10 → NordVPN, VLAN 20 → Mullvad; dropped, not rerouted, when they are down), DNS through the same tunnels, own DHCP server, admin-only VLANs, isolation |
 | **Split DNS** | templates for streaming, banking, LAN names; DNS cache with IP→name mapping |
 | **Lists** | ready-made domain/IP lists, refreshed automatically |
 | **Import** | `.conf` (WireGuard) and `.ovpn` (OpenVPN) files from your provider |
@@ -137,7 +137,6 @@ with short-lived CI subkeys.
 |---|:---:|:---:|
 | Price | free | announced at launch |
 | WireGuard multipath, all strategies, rules, split DNS | ✅ | ✅ |
-| VLANs with tunnels, DHCP, isolation per VLAN (config file/shell) | ✅ | ✅ |
 | Kill switch, DNS/IPv6 leak protection | ✅ | ✅ |
 | Post-quantum WireGuard (Mullvad) | ✅ | ✅ |
 | Network fingerprint, config vault | ✅ | ✅ |
@@ -149,6 +148,7 @@ with short-lived CI subkeys.
 | **Obfuscation** + Mac client | – | ✅ |
 | **Rotation** | – | ✅ |
 | **Remote access** via management WireGuard | – | ✅ |
+| **VLANs** with own tunnels, DHCP, admin VLAN, isolation | – | ✅ |
 | **Network page** (devices, VLAN editor) | – | ✅ |
 
 The number of tunnels is never limited. A license is bound to one device and can be moved.
