@@ -103,7 +103,7 @@ h2{font-size:1.4rem}
 <h2>Features</h2>
 <h3>Multipath &amp; Routing</h3>
 <table>
-<tr><td><strong>Multi-path tunnels</strong></td><td>Any number of WireGuard, OpenVPN and IPsec/IKEv2 uplinks at once</td></tr>
+<tr><td><strong>Multi-path tunnels</strong></td><td>Any number of WireGuard, OpenVPN, IPsec/IKEv2 and AmneziaWG uplinks at once</td></tr>
 <tr><td><strong>6 strategies</strong></td><td>Sticky, WRR, least connections, lowest RTT, failover, bandwidth-aware</td></tr>
 <tr><td><strong>Health checks</strong></td><td>RTT probes; dead tunnels drop out in seconds and come back automatically</td></tr>
 <tr><td><strong>Rules</strong></td><td>Domain wildcards, IP/CIDR, port, protocol, client/network</td></tr>
@@ -113,6 +113,7 @@ h2{font-size:1.4rem}
 <tr><td><strong>Provider assistant (Pro)</strong></td><td>Log in at NordVPN, PIA, Mullvad, IVPN, AzireVPN or Surfshark, pick country, city, protocol (WireGuard, OpenVPN, IPsec/IKEv2) and servers – uplinks are created, PIA keys renewed automatically; guided import for Proton, Windscribe, ExpressVPN, PureVPN</td></tr>
 <tr><td><strong>Import</strong></td><td>.conf (WireGuard) and .ovpn (OpenVPN) from your provider</td></tr>
 <tr><td><strong>IPsec/IKEv2</strong></td><td>Router logins of providers without WireGuard export (e.g. AdGuard VPN) – IKEv2 and ESP run inside MPVPN, no strongSwan; form with connection test</td></tr>
+<tr><td><strong>AmneziaWG</strong></td><td>WireGuard disguised against DPI blocking – junk packets, padding, own headers, imitation packets, AWG 3 header protection; the Amnezia app's files as they are</td></tr>
 <tr><td><strong>Gateway mode</strong></td><td>Default gateway with its own DHCP server, or next to your router</td></tr>
 </table>
 <h3>Leak Protection</h3>
@@ -189,6 +190,7 @@ h2{font-size:1.4rem}
 <li>Web interface with 2FA, live apply</li>
 <li>OpenVPN uplinks (post-quantum TLS)</li>
 <li>IPsec/IKEv2 uplinks (e.g. AdGuard VPN)</li>
+<li>AmneziaWG uplinks (AWG 1.0/2.0/3, against DPI blocking)</li>
 <li>RAM-disk appliance + emergency functions</li>
 <li>Obfuscation + Mac client</li>
 <li>Rotation</li>

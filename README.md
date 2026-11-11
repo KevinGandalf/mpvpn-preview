@@ -54,7 +54,7 @@ the program and the image check it.
 
 | Feature | Description |
 |---|---|
-| **Multi-path tunnels** | any number of WireGuard, OpenVPN and IPsec/IKEv2 uplinks at the same time |
+| **Multi-path tunnels** | any number of WireGuard, OpenVPN, IPsec/IKEv2 and AmneziaWG uplinks at the same time |
 | **IPsec/IKEv2** | router logins of providers without WireGuard export (e.g. AdGuard VPN); IKEv2 and ESP run inside MPVPN, no strongSwan; form with connection test |
 | **6 balancing strategies** | sticky, weighted round-robin, least connections, lowest RTT, failover, bandwidth-aware |
 | **Health checks** | probes with RTT (EWMA); dead tunnels drop out in seconds, recover automatically |
@@ -145,6 +145,7 @@ with short-lived CI subkeys.
 | **Web interface** (2FA, live apply, updates, backups) | – | ✅ |
 | **OpenVPN uplinks** (incl. post-quantum TLS) | – | ✅ |
 | **IPsec/IKEv2 uplinks** | – | ✅ |
+| **AmneziaWG uplinks** (WireGuard disguised against DPI) | – | ✅ |
 | **RAM-disk appliance** (LUKS key, emergency functions) | – | ✅ |
 | **Obfuscation** + Mac client | – | ✅ |
 | **Rotation** | – | ✅ |
