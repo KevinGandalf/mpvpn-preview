@@ -62,7 +62,7 @@ the program and the image check it.
 | **VLANs** (Pro) | 802.1Q VLANs, each with its own tunnels (e.g. VLAN 10 → NordVPN, VLAN 20 → Mullvad; dropped, not rerouted, when they are down), DNS through the same tunnels, own DHCP server, admin-only VLANs, isolation |
 | **Split DNS** | templates for streaming, banking, LAN names; DNS cache with IP→name mapping |
 | **Lists** | ready-made domain/IP lists, refreshed automatically |
-| **Provider assistant** (Pro) | log in at NordVPN or PIA, pick country, city and servers – uplinks are created and PIA keys renewed automatically; Proton via its router configs |
+| **Provider assistant** (Pro) | log in at NordVPN, PIA, Mullvad, IVPN, AzireVPN or Surfshark, pick country, city, protocol (WireGuard, OpenVPN, IPsec/IKEv2) and servers – uplinks are created, PIA keys renewed automatically; guided import for Proton, Windscribe, ExpressVPN, PureVPN |
 | **Import** | `.conf` (WireGuard) and `.ovpn` (OpenVPN) files from your provider |
 | **Gateway mode** | MPVPN as default gateway with its own DHCP server, or next to your router |
 
