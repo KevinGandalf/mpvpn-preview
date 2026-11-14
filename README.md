@@ -146,6 +146,8 @@ with short-lived CI subkeys.
 | **OpenVPN uplinks** (incl. post-quantum TLS) | – | ✅ |
 | **IPsec/IKEv2 uplinks** | – | ✅ |
 | **AmneziaWG uplinks** (WireGuard disguised against DPI) | – | ✅ |
+| **Transport fallback** (Shadowsocks, SOCKS5, HTTPS when WireGuard is blocked) | – | ✅ |
+| **SOCKS5 uplinks** (e.g. Mullvad's proxies through the tunnel: exit elsewhere without a second key) | – | ✅ |
 | **RAM-disk appliance** (LUKS key, emergency functions) | – | ✅ |
 | **Obfuscation** + Mac client | – | ✅ |
 | **Rotation** | – | ✅ |
