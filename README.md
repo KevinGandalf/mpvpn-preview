@@ -132,6 +132,27 @@ Reproducible builds (same commit → same SHA-256), pinned dependencies and GitH
 `govulncheck` on every build, CycloneDX SBOM for every binary, offline root signing key
 with short-lived CI subkeys.
 
+## Providers at a glance
+
+Post-quantum always depends on the provider: MPVPN offers it on every uplink, but it is only
+used where the provider's server supports it – otherwise the tunnel stays classically encrypted.
+Post-quantum that exists only inside a provider's app does not help a router or gateway.
+
+| Provider | Protocols | Post-quantum at the provider | Post-quantum in MPVPN |
+|---|---|---|---|
+| Mullvad | WireGuard (OpenVPN off since 15 Jan 2026) | WireGuard ML-KEM-1024 (+ HQC), without app | ✅ automatic |
+| NordVPN | WireGuard (NordLynx), OpenVPN, IKEv2 | Kyber768 inside the tunnel, without app | planned |
+| IVPN | WireGuard, OpenVPN | Kyber-1024 (+ McEliece) via account API | planned (optional) |
+| Cryptostorm | OpenVPN, WireGuard | OpenVPN X25519MLKEM768 | expected (offered, not tested live) |
+| Own server / VPS | WireGuard, OpenVPN, AmneziaWG | OpenVPN 2.7 hybrid TLS | ✅ OpenVPN (tested) · WireGuard PSK service planned |
+| Surfshark | WireGuard, OpenVPN, IKEv2 | WireGuard, app only | – |
+| ExpressVPN | Lightway, WireGuard, OpenVPN, IKEv2 | Lightway / WireGuard, app only | – |
+| Windscribe | WireGuard, OpenVPN, IKEv2, Stealth | WireGuard PSK at app login | planned |
+| Proton VPN, PIA, AzireVPN, AdGuard VPN | various | not yet / none known | – |
+| PureVPN | WireGuard, OpenVPN, IKEv2 | "quantum-resistant" OpenVPN keys only, no PQ key exchange | – |
+
+As of 16 Nov 2026, based on the providers' own statements.
+
 ## Editions
 
 | | **Community** | **Pro** |
@@ -139,11 +160,11 @@ with short-lived CI subkeys.
 | Price | free | announced at launch |
 | WireGuard multipath, all strategies, rules, split DNS | ✅ | ✅ |
 | Kill switch, DNS/IPv6 leak protection | ✅ | ✅ |
-| Post-quantum WireGuard (Mullvad) | ✅ | ✅ |
+| Post-quantum WireGuard (Mullvad; depends on the provider) | ✅ | ✅ |
 | Network fingerprint, config vault | ✅ | ✅ |
 | Shell configuration | ✅ | ✅ |
 | **Web interface** (2FA, live apply, updates, backups) | – | ✅ |
-| **OpenVPN uplinks** (incl. post-quantum TLS) | – | ✅ |
+| **OpenVPN uplinks** (incl. post-quantum TLS where the provider supports it) | – | ✅ |
 | **IPsec/IKEv2 uplinks** | – | ✅ |
 | **AmneziaWG uplinks** (WireGuard disguised against DPI) | – | ✅ |
 | **Transport fallback** (Shadowsocks, SOCKS5, HTTPS when WireGuard is blocked) | – | ✅ |
@@ -188,7 +209,7 @@ RAM-disk:  Boot ─▶ verify boot files ─▶ unlock LUKS key ─▶ load vaul
 ## Coming next
 
 Censorship-resistant transports (Hysteria2, VLESS + Reality, Shadowsocks-2022, CDN fronting),
-AmneziaWG, post-quantum for more providers (NordVPN, IVPN, Windscribe), a post-quantum PSK
+post-quantum for more providers (NordVPN, IVPN, Windscribe), a post-quantum PSK
 service on your own VPS.
 
 ---

@@ -4,233 +4,360 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MPVPN – Multi-Path VPN Gateway</title>
-<meta name="description" content="Self-hosted multi-path WireGuard and OpenVPN gateway: several tunnels at once, failover, leak protection, post-quantum, runs from RAM.">
+<meta name="description" content="Self-hosted multi-path VPN gateway: WireGuard, OpenVPN, IPsec, AmneziaWG at once, failover, leak protection, post-quantum where the provider supports it, runs from RAM.">
+<link rel="alternate" hreflang="en" href="https://mpvpn.dev/">
+<link rel="alternate" hreflang="de" href="https://mpvpn.dev/">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:#000;color:#e2e8f0;line-height:1.7}
 a{color:#38bdf8;text-decoration:none}
 a:hover{text-decoration:underline}
-img{max-width:100%;border-radius:12px;border:1px solid #1e293b}
-
-.container{max-width:900px;margin:0 auto;padding:3rem 2rem}
-
-/* Hero */
-.hero{text-align:center;padding:5rem 2rem 4rem}
-.hero img.logo{width:140px;border:none;border-radius:0;margin-bottom:2rem}
+img{max-width:100%}
+html:not(.de) [data-l="de"]{display:none!important}
+html.de [data-l="en"]{display:none!important}
+.container{max-width:960px;margin:0 auto;padding:3rem 1rem}
+.lang{position:fixed;top:1rem;right:1rem;z-index:10;display:flex;background:#0f172a;border:1px solid #1e293b;border-radius:999px;padding:3px}
+.lang button{background:none;border:0;color:#94a3b8;font:600 .8rem system-ui,sans-serif;padding:.35rem .8rem;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:#38bdf8;color:#000}
+.hero{text-align:center;padding:5rem 1rem 4rem}
+.hero img.logo{width:140px;margin-bottom:2rem}
 .hero h1{font-size:1.2rem;color:#94a3b8;font-weight:400;margin-bottom:1rem}
 .hero .tagline{font-size:1.6rem;font-weight:700;color:#fff;margin-bottom:2rem;line-height:1.3}
 .badge-row{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-bottom:2.5rem}
-.badge-row span{padding:.35rem .75rem;background:#111827;border:1px solid #1e293b;border-radius:999px;font-size:.8rem;color:#94a3b8}
+.badge-row span.b{padding:.35rem .75rem;background:#111827;border:1px solid #1e293b;border-radius:999px;font-size:.8rem;color:#94a3b8}
 .btn{display:inline-block;padding:.75rem 2rem;border:1px solid #38bdf8;color:#38bdf8;font-weight:700;border-radius:10px;margin:1rem .5rem 0}
 .coming{display:inline-block;padding:.75rem 2rem;background:linear-gradient(135deg,#38bdf8,#818cf8);color:#000;font-weight:700;font-size:1rem;border-radius:10px;margin-top:1rem}
-
-/* Sections */
 h2{font-size:1.8rem;font-weight:700;color:#fff;margin:3rem 0 1.5rem;padding-top:2rem;border-top:1px solid #1e293b}
 h3{font-size:1.2rem;color:#38bdf8;margin:2rem 0 1rem}
 p{color:#94a3b8;margin-bottom:1rem}
-
-/* Screenshots */
-.screenshots{display:grid;gap:2rem;margin:2rem 0}
-.screenshots figure{margin:0}
-.screenshots figcaption{font-size:.85rem;color:#64748b;margin-top:.5rem;text-align:center}
-
-/* Tables */
 table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.9rem}
-th,td{padding:.6rem .8rem;text-align:left;border-bottom:1px solid #1e293b}
+th,td{padding:.6rem .8rem;text-align:left;border-bottom:1px solid #1e293b;vertical-align:top}
 th{color:#64748b;font-size:.75rem;text-transform:uppercase;font-weight:500}
 td{color:#cbd5e1}
-
-/* Pricing */
+td:first-child{width:32%}
+.cmp td:first-child{width:62%}
+.pro{display:inline-block;font:700 .62rem/1 system-ui,sans-serif;letter-spacing:.06em;padding:.22rem .4rem;border-radius:5px;background:linear-gradient(135deg,#38bdf8,#818cf8);color:#000;vertical-align:middle;margin-left:.35rem}
+.pqnote{background:#0b1220;border:1px solid #1e3a5f;border-left:3px solid #38bdf8;border-radius:8px;padding:.8rem 1rem;font-size:.85rem;color:#cbd5e1}
+/* Why Pro */
+.whypro{margin:2rem 0;padding:2rem;border:1px solid #38bdf8;border-radius:18px;background:radial-gradient(ellipse at top,#0c2235 0%,#050b14 70%);box-shadow:0 0 40px rgba(56,189,248,.1)}
+.whypro h2{border:0;margin:0 0 .5rem;padding:0}
+.whypro .lead{color:#cbd5e1;margin-bottom:1.5rem}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.card{background:#0f172a;border:1px solid #1e293b;border-radius:12px;padding:1.1rem}
+.card h5{color:#fff;font-size:1rem;margin-bottom:.4rem}
+.card p{font-size:.85rem;margin:0}
+.cta{margin-top:1.5rem;text-align:center}
+.cmp td.c,.cmp th{text-align:center}
+.cmp th:first-child{text-align:left}
+.cmp .pcol{background:rgba(56,189,248,.06)}
+.cmp th.pcol{color:#38bdf8}
+.y{color:#22c55e;font-weight:700}.x{color:#475569}
 .editions{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin:2rem 0}
 .edition{background:#0f172a;border:1px solid #1e293b;border-radius:16px;padding:2rem}
-.edition.pro{border-color:#38bdf8;box-shadow:0 0 30px rgba(56,189,248,.08)}
+.edition.pro-ed{border-color:#38bdf8;box-shadow:0 0 30px rgba(56,189,248,.12);position:relative}
+.edition.pro-ed .rec{position:absolute;top:-.75rem;right:1.25rem;background:linear-gradient(135deg,#38bdf8,#818cf8);color:#000;font:700 .7rem system-ui,sans-serif;padding:.3rem .7rem;border-radius:999px}
 .edition h4{font-size:1.1rem;margin-bottom:.5rem;color:#fff}
 .edition .price{font-size:2rem;font-weight:800;color:#38bdf8;margin:.5rem 0}
-.edition .price span{font-size:.9rem;color:#64748b;font-weight:400}
 .edition ul{list-style:none;margin-top:1rem}
 .edition li{padding:.3rem 0;font-size:.85rem;color:#94a3b8}
 .edition li::before{content:"\2713 ";color:#22c55e;font-weight:700}
 .edition li.no::before{content:"\2717 ";color:#ef4444}
-
 /* Architecture */
-pre{background:#0f172a;border:1px solid #1e293b;border-radius:10px;padding:1.5rem;overflow-x:auto;font-size:.8rem;color:#94a3b8;line-height:1.5}
+.arch{background:#05080d;border:1px solid #1e293b;border-radius:16px;padding:1.5rem 1.25rem}
+.flow{margin-bottom:1.6rem}
+.flow:last-child{margin-bottom:0}
+.flow h4{color:#fff;text-align:center;font-size:1rem;margin-bottom:.8rem}
+.row{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:.45rem .2rem}
+.n{border:1.5px solid #10b981;border-radius:8px;padding:.4rem .55rem;text-align:center;background:#06110e;min-width:84px}
+.n b{display:block;color:#fff;font-size:.82rem;font-weight:600;line-height:1.25}
+.n small{display:block;color:#94a3b8;font-size:.66rem;line-height:1.3;margin-top:.15rem;max-width:132px}
+.n.hl{background:#0ea5e9;border-color:#0ea5e9}
+.n.hl b{color:#fff}.n.hl small{color:#e0f2fe}
+.n.warn{border-color:#ef4444;background:#1a0707}
+.n.stack{display:flex;flex-direction:column;gap:.2rem;align-items:stretch;border-color:#38bdf8}
+.n.stack .u{display:block;font-size:.76rem;color:#e2e8f0;border:1px solid #1e293b;border-radius:5px;padding:.15rem .4rem;background:#0b1220}
+.n.stack .u em{font-style:normal;color:#a78bfa;font-size:.65rem;font-weight:700}
+.n.stack .pro{font-size:.52rem;padding:.15rem .3rem}
+.row{flex-wrap:nowrap}
+.r2{margin-top:.5rem}
+.cont{font-style:normal;color:#22c55e;font-size:1.1rem;margin-right:.2rem}
+.ar{display:inline-block;width:20px;height:2px;background:#22c55e;position:relative;flex:none}
+.ar::after{content:"";position:absolute;right:-1px;top:-4px;border:5px solid transparent;border-left:7px solid #22c55e;border-right:0}
+.fnote{text-align:center;font-size:.78rem;color:#64748b;margin:.7rem 0 0}
+.flow h4 .pro{font-size:.55rem}
 
-/* Footer */
-footer{text-align:center;padding:3rem 2rem;color:#475569;font-size:.85rem;border-top:1px solid #1e293b;margin-top:3rem}
-
+.prov{font-size:.82rem}
+.prov td{vertical-align:top}
+.prov td:first-child{width:auto;white-space:nowrap}
+.pv{display:inline-block;width:.7rem;height:.7rem;border-radius:50%;margin-right:.35rem;vertical-align:-.05rem;box-sizing:border-box}
+.pv-y{background:#22c55e}
+.pv-a{border:2px solid #f59e0b;background:linear-gradient(90deg,#f59e0b 50%,transparent 50%)}
+.pv-p{border:2px solid #38bdf8}
+.pv-n{border-radius:2px;height:2px;width:.7rem;background:#64748b;vertical-align:.2rem}
+.legend{font-size:.78rem;color:#64748b}
+.src{font-size:.75rem;color:#475569}
+footer{text-align:center;padding:3rem 1rem;color:#475569;font-size:.85rem;border-top:1px solid #1e293b;margin-top:3rem}
 @media(max-width:768px){
+.prov tr:first-child{display:none}
+.prov,.prov tbody,.prov tr,.prov td{display:block;width:auto}
+.prov tr{border:1px solid #1e293b;border-radius:10px;padding:.5rem .7rem;margin-bottom:.7rem;background:#0b1220}
+.prov td{border:0;padding:.2rem 0}
+.prov td.pname{font-size:1rem;color:#fff}
+.prov td[data-en]::before{display:block;font-size:.66rem;text-transform:uppercase;letter-spacing:.04em;color:#64748b;content:attr(data-en)}
+html.de .prov td[data-de]::before{content:attr(data-de)}
 .hero .tagline{font-size:1.2rem}
-.editions{grid-template-columns:1fr}
+.editions,.cards{grid-template-columns:1fr}
 h2{font-size:1.4rem}
+.whypro{padding:1.25rem}
+td:first-child{width:auto}
+.row{flex-direction:column}.cont{display:none}.r2{margin-top:0}
+.ar{width:2px;height:16px}
+.ar::after{right:-4px;top:auto;bottom:-1px;border:5px solid transparent;border-top:7px solid #22c55e;border-bottom:0}
+.n{min-width:200px}.n small{max-width:none}
 }
+@media(min-width:769px) and (max-width:960px){.cards{grid-template-columns:1fr 1fr}}
 </style>
+<script>
+(function(){
+  var h=document.documentElement, k='mpvpn-lang', l=null;
+  try{l=localStorage.getItem(k)}catch(e){}
+  if(!l){l=(navigator.language||'en').slice(0,2).toLowerCase()==='de'?'de':'en'}
+  function set(x){h.classList.toggle('de',x==='de');h.lang=x;
+    document.querySelectorAll('.lang button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.set===x))});
+    try{localStorage.setItem(k,x)}catch(e){}}
+  set(l);
+  document.addEventListener('DOMContentLoaded',function(){set(h.classList.contains('de')?'de':'en')});
+  document.addEventListener('click',function(e){var b=e.target.closest('.lang button');if(b){set(b.dataset.set)}});
+})();
+</script>
 </head>
 <body>
 
+<div class="lang" role="group" aria-label="Language / Sprache">
+<button type="button" data-set="de" aria-pressed="false">DE</button>
+<button type="button" data-set="en" aria-pressed="true">EN</button>
+</div>
+
 <section class="hero">
 <img src="docs/logo.png" alt="MPVPN Logo" class="logo">
-<h1>Multi-Path WireGuard &amp; OpenVPN Gateway</h1>
-<p class="tagline">Several VPN tunnels at once.<br>Automatic failover. Leak-proof. Runs from RAM.</p>
+<h1><span data-l="en">Multi-Path VPN Gateway – WireGuard, OpenVPN, IPsec, AmneziaWG</span><span data-l="de">Multipath-VPN-Gateway – WireGuard, OpenVPN, IPsec, AmneziaWG</span></h1>
+<p class="tagline"><span data-l="en">Several VPN tunnels at once.<br>Automatic failover. Leak-proof. Runs from RAM.</span><span data-l="de">Mehrere VPN-Tunnel gleichzeitig.<br>Automatischer Failover. Leak-sicher. Läuft im RAM.</span></p>
 <div class="badge-row">
-<span>WireGuard + OpenVPN + IPsec</span>
-<span>ML-KEM post-quantum</span>
-<span>Kill switch</span>
-<span>RAM-only appliance</span>
-<span>Signed &amp; reproducible</span>
+<span class="b">WireGuard + OpenVPN + IPsec + AmneziaWG</span>
+<span class="b"><span data-l="en">Post-quantum¹</span><span data-l="de">Post-Quanten¹</span></span>
+<span class="b">Kill switch</span>
+<span class="b"><span data-l="en">Gets through DPI blocks</span><span data-l="de">Kommt durch DPI-Sperren</span></span>
+<span class="b"><span data-l="en">RAM-only appliance</span><span data-l="de">Reine RAM-Appliance</span></span>
+<span class="b"><span data-l="en">Signed &amp; reproducible</span><span data-l="de">Signiert &amp; reproduzierbar</span></span>
 </div>
 <a class="coming" href="https://github.com/KevinGandalf/mpvpn-preview/releases/latest">Download</a>
-<a class="btn" href="#editions">Editions</a>
+<a class="btn" href="#pro"><span data-l="en">Why Pro?</span><span data-l="de">Warum Pro?</span></a>
+<a class="btn" href="#editions"><span data-l="en">Editions</span><span data-l="de">Editionen</span></a>
+<p style="font-size:.75rem;color:#64748b;margin-top:1.5rem"><span data-l="en">¹ Post-quantum depends on the provider – see below.</span><span data-l="de">¹ Post-Quanten hängt vom Anbieter ab – siehe unten.</span></p>
 </section>
 
 <div class="container">
 
-<h2>What is MPVPN?</h2>
-<p>MPVPN is a self-hosted VPN gateway for your home or office network. It sends every connection through one of several VPN tunnels – from the same or different providers (Mullvad, NordVPN, IVPN, Surfshark, Proton, your own VPS …). If a tunnel fails, traffic moves on within seconds. Nothing leaves your network outside a tunnel.</p>
-<p>One static Go binary with userspace WireGuard and a native OpenVPN client, on Alpine Linux – or as a stateless boot image entirely from RAM.</p>
+<h2><span data-l="en">What is MPVPN?</span><span data-l="de">Was ist MPVPN?</span></h2>
+<p data-l="en">MPVPN is a self-hosted VPN gateway for your home or office network. It sends every connection through one of several VPN tunnels – from the same or different providers (Mullvad, NordVPN, IVPN, Surfshark, Proton, your own VPS …). If a tunnel fails, traffic moves on within seconds. Nothing leaves your network outside a tunnel.</p><p data-l="de">MPVPN ist ein selbst betriebenes VPN-Gateway für dein Heim- oder Büronetz. Es schickt jede Verbindung durch einen von mehreren VPN-Tunneln – vom selben oder von verschiedenen Anbietern (Mullvad, NordVPN, IVPN, Surfshark, Proton, dein eigener VPS …). Fällt ein Tunnel aus, läuft der Verkehr in Sekunden weiter. Nichts verlässt dein Netz außerhalb eines Tunnels.</p>
+<p data-l="en">One static Go binary with userspace WireGuard and native OpenVPN, IPsec and AmneziaWG clients, on Alpine Linux – or as a stateless boot image entirely from RAM.</p><p data-l="de">Ein statisches Go-Programm mit WireGuard im Userspace und eigenen Clients für OpenVPN, IPsec und AmneziaWG, auf Alpine Linux – oder als zustandsloses Boot-Image komplett im RAM.</p>
+
+<section class="whypro" id="pro">
+<h2><span data-l="en">Why Pro?</span><span data-l="de">Warum Pro?</span></h2>
+<p class="lead"><span data-l="en">Community is a complete, leak-proof multipath VPN for the shell. Pro turns it into an appliance you set up in minutes, that gets through blocks and leaves no traces.</span><span data-l="de">Community ist ein vollständiges, leak-sicheres Multipath-VPN für die Shell. Pro macht daraus eine Appliance, die in Minuten eingerichtet ist, durch Sperren kommt und keine Spuren hinterlässt.</span></p>
+<div class="cards">
+<div class="card"><h5><span data-l="en">Every protocol</span><span data-l="de">Jedes Protokoll</span></h5><p><span data-l="en">OpenVPN, IPsec/IKEv2, AmneziaWG and SOCKS5 next to WireGuard – use almost any provider, mix them freely.</span><span data-l="de">OpenVPN, IPsec/IKEv2, AmneziaWG und SOCKS5 neben WireGuard – fast jeder Anbieter, frei kombinierbar.</span></p></div><div class="card"><h5><span data-l="en">Gets through blocks</span><span data-l="de">Kommt durch Sperren</span></h5><p><span data-l="en">Obfuscation as HTTPS, AmneziaWG against DPI and automatic transport fallback when WireGuard is blocked.</span><span data-l="de">Tarnung als HTTPS, AmneziaWG gegen DPI und automatischer Transport-Fallback, wenn WireGuard gesperrt ist.</span></p></div><div class="card"><h5><span data-l="en">Set up in minutes</span><span data-l="de">In Minuten eingerichtet</span></h5><p><span data-l="en">Web interface with 2FA and live apply. Provider assistant: log in, pick country and servers – uplinks are created.</span><span data-l="de">Webinterface mit 2FA und Live-Übernahme. Anbieter-Assistent: anmelden, Land und Server wählen – die Uplinks entstehen.</span></p></div><div class="card"><h5><span data-l="en">Leaves no traces</span><span data-l="de">Hinterlässt keine Spuren</span></h5><p><span data-l="en">RAM-disk appliance with LUKS key and verified boot. Duress passphrase, panic button and dead-man switch.</span><span data-l="de">RAM-Disk-Appliance mit LUKS-Stick und geprüftem Boot. Duress-Passwort, Panikknopf und Dead-Man-Switch.</span></p></div><div class="card"><h5><span data-l="en">Whole network, segmented</span><span data-l="de">Ganzes Netz, getrennt</span></h5><p><span data-l="en">VLANs with their own tunnels, DHCP and isolation; network page with every device and the tunnels it used.</span><span data-l="de">VLANs mit eigenen Tunneln, DHCP und Isolation; Netzwerkseite mit jedem Gerät und seinen Tunneln.</span></p></div><div class="card"><h5><span data-l="en">Harder to profile</span><span data-l="de">Schwerer zu profilieren</span></h5><p><span data-l="en">Rotation of tunnels and servers on a schedule with jitter; Mullvad multihop and SOCKS5 exits.</span><span data-l="de">Rotation von Tunneln und Servern nach Zeitplan mit Jitter; Mullvad-Multihop und SOCKS5-Ausgänge.</span></p></div>
+</div>
+<table class="cmp"><tr><th></th><th>Community</th><th class="pcol">Pro</th></tr>
+<tr><td><span data-l="en">WireGuard multipath, 6 strategies, rules, split DNS</span><span data-l="de">WireGuard-Multipath, 6 Strategien, Regeln, Split-DNS</span></td><td class="c"><span class="y">✓</span></td><td class="c pcol"><span class="y">✓</span></td></tr>
+<tr><td><span data-l="en">Kill switch, DNS/IPv6 leak protection, leak self-test</span><span data-l="de">Kill-Switch, DNS-/IPv6-Leak-Schutz, Leak-Selbsttest</span></td><td class="c"><span class="y">✓</span></td><td class="c pcol"><span class="y">✓</span></td></tr>
+<tr><td><span data-l="en">Post-quantum WireGuard¹</span><span data-l="de">Post-Quanten-WireGuard¹</span></td><td class="c"><span class="y">✓</span></td><td class="c pcol"><span class="y">✓</span></td></tr>
+<tr><td><span data-l="en">Network fingerprint, config vault, shell configuration</span><span data-l="de">Netz-Fingerprint, Config-Vault, Shell-Konfiguration</span></td><td class="c"><span class="y">✓</span></td><td class="c pcol"><span class="y">✓</span></td></tr>
+<tr><td><span data-l="en">Unlimited tunnels</span><span data-l="de">Unbegrenzt viele Tunnel</span></td><td class="c"><span class="y">✓</span></td><td class="c pcol"><span class="y">✓</span></td></tr>
+<tr><td><span data-l="en">Web interface with 2FA, live apply, signed updates, backups</span><span data-l="de">Webinterface mit 2FA, Live-Übernahme, signierte Updates, Backups</span></td><td class="c"><span class="x">–</span></td><td class="c pcol"><span class="y">✓</span></td></tr>
+<tr><td><span data-l="en">Provider assistant (NordVPN, PIA, Mullvad, IVPN, AzireVPN, Surfshark)</span><span data-l="de">Anbieter-Assistent (NordVPN, PIA, Mullvad, IVPN, AzireVPN, Surfshark)</span></td><td class="c"><span class="x">–</span></td><td class="c pcol"><span class="y">✓</span></td></tr>
+<tr><td><span data-l="en">OpenVPN uplinks incl. post-quantum TLS¹</span><span data-l="de">OpenVPN-Uplinks inkl. Post-Quanten-TLS¹</span></td><td class="c"><span class="x">–</span></td><td class="c pcol"><span class="y">✓</span></td></tr>
+<tr><td><span data-l="en">IPsec/IKEv2 uplinks (e.g. AdGuard VPN)</span><span data-l="de">IPsec/IKEv2-Uplinks (z. B. AdGuard VPN)</span></td><td class="c"><span class="x">–</span></td><td class="c pcol"><span class="y">✓</span></td></tr>
+<tr><td><span data-l="en">AmneziaWG uplinks (AWG 1.0/2.0/3)</span><span data-l="de">AmneziaWG-Uplinks (AWG 1.0/2.0/3)</span></td><td class="c"><span class="x">–</span></td><td class="c pcol"><span class="y">✓</span></td></tr>
+<tr><td><span data-l="en">Transport fallback (Shadowsocks, SOCKS5, HTTPS) and SOCKS5 uplinks</span><span data-l="de">Transport-Fallback (Shadowsocks, SOCKS5, HTTPS) und SOCKS5-Uplinks</span></td><td class="c"><span class="x">–</span></td><td class="c pcol"><span class="y">✓</span></td></tr>
+<tr><td><span data-l="en">Obfuscation as HTTPS + Mac client</span><span data-l="de">Tarnung als HTTPS + Mac-Client</span></td><td class="c"><span class="x">–</span></td><td class="c pcol"><span class="y">✓</span></td></tr>
+<tr><td><span data-l="en">RAM-disk appliance + emergency functions</span><span data-l="de">RAM-Disk-Appliance + Notfallfunktionen</span></td><td class="c"><span class="x">–</span></td><td class="c pcol"><span class="y">✓</span></td></tr>
+<tr><td><span data-l="en">VLANs with own tunnels, DHCP, admin VLAN, isolation</span><span data-l="de">VLANs mit eigenen Tunneln, DHCP, Admin-VLAN, Isolation</span></td><td class="c"><span class="x">–</span></td><td class="c pcol"><span class="y">✓</span></td></tr>
+<tr><td><span data-l="en">Network page (devices, VLAN editor)</span><span data-l="de">Netzwerkseite (Geräte, VLAN-Editor)</span></td><td class="c"><span class="x">–</span></td><td class="c pcol"><span class="y">✓</span></td></tr>
+<tr><td><span data-l="en">Rotation, remote access via management WireGuard</span><span data-l="de">Rotation, Fernzugriff über Management-WireGuard</span></td><td class="c"><span class="x">–</span></td><td class="c pcol"><span class="y">✓</span></td></tr></table>
+<p style="font-size:.8rem;color:#64748b"><span data-l="en">¹ Post-quantum depends on the provider. The number of tunnels is never limited – not in Community, not in Pro.</span><span data-l="de">¹ Post-Quanten hängt vom Anbieter ab. Die Zahl der Tunnel ist nie begrenzt – weder in Community noch in Pro.</span></p>
+<div class="cta"><a class="coming" href="#editions"><span data-l="en">Compare editions</span><span data-l="de">Editionen vergleichen</span></a></div>
+</section>
 
 <h2>Download</h2>
-<p>Programs and boot images are free to download from the <a href="https://github.com/KevinGandalf/mpvpn-preview/releases">releases</a> – built reproducibly, boot-tested and signed (Ed25519). The VPN core runs without a license; Pro features need one.</p>
+<p data-l="en">Programs and boot images are free to download from the <a href="https://github.com/KevinGandalf/mpvpn-preview/releases">releases</a> – built reproducibly, boot-tested and signed (Ed25519). The VPN core runs without a license; Pro features need one.</p><p data-l="de">Programme und Boot-Images gibt es kostenlos bei den <a href="https://github.com/KevinGandalf/mpvpn-preview/releases">Releases</a> – reproduzierbar gebaut, boot-getestet und signiert (Ed25519). Der VPN-Kern läuft ohne Lizenz; Pro-Funktionen brauchen eine.</p>
 <table>
-<tr><td><strong>mpvpn-x86_64.iso</strong></td><td>USB stick, CD, KVM/QEMU/Proxmox (BIOS + UEFI)</td></tr>
-<tr><td><strong>mpvpn-x86_64.qcow2</strong></td><td>KVM disk image</td></tr>
-<tr><td><strong>vmlinuz / initramfs / ipxe</strong></td><td>PXE network boot</td></tr>
-<tr><td><strong>mpvpn-pro-linux-amd64</strong></td><td>normal installation (Alpine, Debian, Ubuntu, Alma/Rocky)</td></tr>
-<tr><td><strong>mpvpn-obfs</strong></td><td>Mac/Linux client for obfuscation</td></tr>
-<tr><td><strong>SHA256SUMS, signatures, SBOM</strong></td><td>verify before use</td></tr>
+<tr><td><strong>mpvpn-x86_64.iso</strong> <span class="pro">PRO</span></td><td><span data-l="en">USB stick, CD, KVM/QEMU/Proxmox (BIOS + UEFI)</span><span data-l="de">USB-Stick, CD, KVM/QEMU/Proxmox (BIOS + UEFI)</span></td></tr>
+<tr><td><strong>mpvpn-x86_64.qcow2</strong> <span class="pro">PRO</span></td><td><span data-l="en">KVM disk image</span><span data-l="de">KVM-Plattenimage</span></td></tr>
+<tr><td><strong>vmlinuz / initramfs / ipxe</strong> <span class="pro">PRO</span></td><td><span data-l="en">PXE network boot</span><span data-l="de">PXE-Netzwerk-Boot</span></td></tr>
+<tr><td><strong>mpvpn-pro-linux-amd64</strong></td><td><span data-l="en">normal installation (Alpine, Debian, Ubuntu, Alma/Rocky)</span><span data-l="de">normale Installation (Alpine, Debian, Ubuntu, Alma/Rocky)</span></td></tr>
+<tr><td><strong>mpvpn-obfs</strong> <span class="pro">PRO</span></td><td><span data-l="en">Mac/Linux client for obfuscation</span><span data-l="de">Mac-/Linux-Client für die Tarnung</span></td></tr>
+<tr><td><strong>SHA256SUMS, <span data-l="en">signatures</span><span data-l="de">Signaturen</span>, SBOM</strong></td><td><span data-l="en">verify before use</span><span data-l="de">vor der Nutzung prüfen</span></td></tr>
 </table>
 
-<h2>Features</h2>
-<h3>Multipath &amp; Routing</h3>
+<h2><span data-l="en">Features</span><span data-l="de">Funktionen</span></h2>
+<h3><span data-l="en">Multipath &amp; Routing</span><span data-l="de">Multipath &amp; Routing</span></h3>
 <table>
-<tr><td><strong>Multi-path tunnels</strong></td><td>Any number of WireGuard, OpenVPN, IPsec/IKEv2 and AmneziaWG uplinks at once</td></tr>
-<tr><td><strong>6 strategies</strong></td><td>Sticky, WRR, least connections, lowest RTT, failover, bandwidth-aware</td></tr>
-<tr><td><strong>Health checks</strong></td><td>RTT probes; dead tunnels drop out in seconds and come back automatically</td></tr>
-<tr><td><strong>Rules</strong></td><td>Domain wildcards, IP/CIDR, port, protocol, client/network</td></tr>
-<tr><td><strong>VLANs (Pro)</strong></td><td>802.1Q VLANs with their own tunnels each (e.g. VLAN 10 → NordVPN, VLAN 20 → Mullvad), DNS through the same tunnels, own DHCP server, admin-only VLANs, isolation</td></tr>
-<tr><td><strong>Network page</strong></td><td>Every device of the LAN and the VLANs as map and table – names, vendor, device type, which tunnels it used; RAM only, history can be switched off</td></tr>
-<tr><td><strong>Split DNS</strong></td><td>Templates, DNS cache with IP→name mapping, auto-refreshed lists</td></tr>
-<tr><td><strong>Provider assistant (Pro)</strong></td><td>Log in at NordVPN, PIA, Mullvad, IVPN, AzireVPN or Surfshark, pick country, city, protocol (WireGuard, OpenVPN, IPsec/IKEv2) and servers – uplinks are created, PIA keys renewed automatically; guided import for Proton, Windscribe, ExpressVPN, PureVPN</td></tr>
-<tr><td><strong>Import</strong></td><td>.conf (WireGuard) and .ovpn (OpenVPN) from your provider</td></tr>
-<tr><td><strong>IPsec/IKEv2</strong></td><td>Router logins of providers without WireGuard export (e.g. AdGuard VPN) – IKEv2 and ESP run inside MPVPN, no strongSwan; form with connection test</td></tr>
-<tr><td><strong>AmneziaWG</strong></td><td>WireGuard disguised against DPI blocking – junk packets, padding, own headers, imitation packets, AWG 3 header protection; the Amnezia app's files as they are</td></tr>
-<tr><td><strong>Gateway mode</strong></td><td>Default gateway with its own DHCP server, or next to your router</td></tr>
+<tr><td><strong><span data-l="en">Multi-path tunnels</span><span data-l="de">Multipath-Tunnel</span></strong></td><td><span data-l="en">Any number of WireGuard, OpenVPN, IPsec/IKEv2, AmneziaWG and SOCKS5 uplinks at once</span><span data-l="de">Beliebig viele WireGuard-, OpenVPN-, IPsec/IKEv2-, AmneziaWG- und SOCKS5-Uplinks gleichzeitig</span></td></tr>
+<tr><td><strong><span data-l="en">6 strategies</span><span data-l="de">6 Strategien</span></strong></td><td><span data-l="en">Sticky, WRR, least connections, lowest RTT, failover, bandwidth-aware</span><span data-l="de">Sticky, WRR, wenigste Verbindungen, niedrigste RTT, Failover, bandbreitenbewusst</span></td></tr>
+<tr><td><strong><span data-l="en">Health checks</span><span data-l="de">Health-Checks</span></strong></td><td><span data-l="en">RTT probes and handshake checks; dead tunnels drop out in seconds and come back automatically</span><span data-l="de">RTT-Proben und Handshake-Prüfung; tote Tunnel fallen in Sekunden raus und kommen automatisch zurück</span></td></tr>
+<tr><td><strong><span data-l="en">Rules</span><span data-l="de">Regeln</span></strong></td><td><span data-l="en">Domain wildcards, IP/CIDR, port, protocol, client/network</span><span data-l="de">Domain-Wildcards, IP/CIDR, Port, Protokoll, Client/Netz</span></td></tr>
+<tr><td><strong><span data-l="en">Split DNS</span><span data-l="de">Split-DNS</span></strong></td><td><span data-l="en">Templates, DNS cache with IP→name mapping, auto-refreshed lists</span><span data-l="de">Vorlagen, DNS-Cache mit IP→Name-Zuordnung, automatisch aktualisierte Listen</span></td></tr>
+<tr><td><strong><span data-l="en">Import</span><span data-l="de">Import</span></strong></td><td><span data-l="en">.conf (WireGuard, AmneziaWG) and .ovpn (OpenVPN) from your provider</span><span data-l="de">.conf (WireGuard, AmneziaWG) und .ovpn (OpenVPN) vom Anbieter</span></td></tr>
+<tr><td><strong><span data-l="en">Provider assistant</span><span data-l="de">Anbieter-Assistent</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">Log in at NordVPN, PIA, Mullvad, IVPN, AzireVPN or Surfshark, pick country, city, protocol and servers – uplinks are created, keys renewed automatically; guided import for Proton, Windscribe, ExpressVPN, PureVPN</span><span data-l="de">Bei NordVPN, PIA, Mullvad, IVPN, AzireVPN oder Surfshark anmelden, Land, Stadt, Protokoll und Server wählen – die Uplinks entstehen, Schlüssel werden automatisch erneuert; geführter Import für Proton, Windscribe, ExpressVPN, PureVPN</span></td></tr>
+<tr><td><strong><span data-l="en">Mullvad extras</span><span data-l="de">Mullvad-Extras</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">Multihop over Mullvad's entry relays and SOCKS5 exits through the tunnel – exit elsewhere without a second key</span><span data-l="de">Multihop über Mullvads Eingangs-Server und SOCKS5-Ausgänge durch den Tunnel – woanders raus ohne zweiten Schlüssel</span></td></tr>
+<tr><td><strong><span data-l="en">IPsec/IKEv2</span><span data-l="de">IPsec/IKEv2</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">Router logins of providers without WireGuard export (e.g. AdGuard VPN) – IKEv2 and ESP run inside MPVPN, no strongSwan</span><span data-l="de">Router-Zugänge von Anbietern ohne WireGuard-Export (z. B. AdGuard VPN) – IKEv2 und ESP laufen in MPVPN, ohne strongSwan</span></td></tr>
+<tr><td><strong><span data-l="en">VLANs</span><span data-l="de">VLANs</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">802.1Q VLANs with their own tunnels each (e.g. VLAN 10 → NordVPN, VLAN 20 → Mullvad), DNS through the same tunnels, own DHCP, admin-only VLANs, isolation</span><span data-l="de">802.1Q-VLANs mit jeweils eigenen Tunneln (z. B. VLAN 10 → NordVPN, VLAN 20 → Mullvad), DNS durch dieselben Tunnel, eigenes DHCP, Admin-VLANs, Isolation</span></td></tr>
+<tr><td><strong><span data-l="en">Network page</span><span data-l="de">Netzwerkseite</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">Every device of the LAN and the VLANs as map and table – name, vendor, type, tunnels used; RAM only</span><span data-l="de">Jedes Gerät im LAN und in den VLANs als Karte und Tabelle – Name, Hersteller, Typ, genutzte Tunnel; nur im RAM</span></td></tr>
+<tr><td><strong><span data-l="en">Gateway mode</span><span data-l="de">Gateway-Modus</span></strong></td><td><span data-l="en">Default gateway with its own DHCP server, or next to your router</span><span data-l="de">Standard-Gateway mit eigenem DHCP-Server oder neben deinem Router</span></td></tr>
 </table>
-<h3>Leak Protection</h3>
+<h3><span data-l="en">Leak Protection</span><span data-l="de">Leak-Schutz</span></h3>
 <table>
-<tr><td><strong>Kill switch</strong></td><td>nftables: nothing leaves the LAN outside a tunnel</td></tr>
-<tr><td><strong>DNS through the tunnel</strong></td><td>Port 53 captured, DoT/DoH to third parties blocked</td></tr>
-<tr><td><strong>IPv6 off</strong></td><td>Kernel + sysctl</td></tr>
-<tr><td><strong>Leak self-test</strong></td><td>WAN IP vs. exit IP of every tunnel, kill switch, tunnel DNS</td></tr>
+<tr><td><strong><span data-l="en">Kill switch</span><span data-l="de">Kill-Switch</span></strong></td><td><span data-l="en">nftables: nothing leaves the LAN outside a tunnel</span><span data-l="de">nftables: nichts verlässt das LAN außerhalb eines Tunnels</span></td></tr>
+<tr><td><strong><span data-l="en">DNS through the tunnel</span><span data-l="de">DNS durch den Tunnel</span></strong></td><td><span data-l="en">Port 53 captured, DoT/DoH to third parties blocked</span><span data-l="de">Port 53 abgefangen, DoT/DoH zu Dritten gesperrt</span></td></tr>
+<tr><td><strong><span data-l="en">IPv6 off</span><span data-l="de">IPv6 aus</span></strong></td><td><span data-l="en">Kernel + sysctl</span><span data-l="de">Kernel + sysctl</span></td></tr>
+<tr><td><strong><span data-l="en">Leak self-test</span><span data-l="de">Leak-Selbsttest</span></strong></td><td><span data-l="en">WAN IP vs. exit IP of every tunnel, kill switch, tunnel DNS</span><span data-l="de">WAN-IP gegen Ausgangs-IP jedes Tunnels, Kill-Switch, Tunnel-DNS</span></td></tr>
 </table>
-<h3>Post-Quantum</h3>
+<h3><span data-l="en">Censorship Resistance</span><span data-l="de">Zensur-Umgehung</span></h3>
 <table>
-<tr><td><strong>WireGuard + ML-KEM-1024</strong></td><td>Mullvad ephemeral peer, detected automatically</td></tr>
-<tr><td><strong>OpenVPN hybrid TLS</strong></td><td>X25519MLKEM768 in the control channel</td></tr>
-<tr><td><strong>Backups</strong></td><td>age with post-quantum recipients</td></tr>
+<tr><td><strong><span data-l="en">Obfuscation</span><span data-l="de">Tarnung</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">WireGuard over TLS/WebSocket on 443 to your own relay – looks like HTTPS</span><span data-l="de">WireGuard über TLS/WebSocket auf 443 zu deinem eigenen Relay – sieht aus wie HTTPS</span></td></tr>
+<tr><td><strong><span data-l="en">AmneziaWG</span><span data-l="de">AmneziaWG</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">WireGuard disguised against DPI – junk packets, padding, own headers, imitation packets, AWG 3 header protection</span><span data-l="de">WireGuard getarnt gegen DPI – Junk-Pakete, Padding, eigene Header, Imitationspakete, AWG-3-Header-Schutz</span></td></tr>
+<tr><td><strong><span data-l="en">Transport fallback</span><span data-l="de">Transport-Fallback</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">Shadowsocks, SOCKS5 or HTTPS per uplink when plain WireGuard is blocked – switches automatically and probes back</span><span data-l="de">Shadowsocks, SOCKS5 oder HTTPS pro Uplink, wenn normales WireGuard gesperrt ist – schaltet automatisch um und prüft zurück</span></td></tr>
+<tr><td><strong><span data-l="en">Mac client</span><span data-l="de">Mac-Client</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">mpvpn-obfs: the WireGuard app on a Mac, tunnelled as HTTPS</span><span data-l="de">mpvpn-obfs: die WireGuard-App auf dem Mac, als HTTPS getunnelt</span></td></tr>
 </table>
-<h3>Privacy &amp; Fingerprint</h3>
+<h3><span data-l="en">Post-Quantum</span><span data-l="de">Post-Quanten</span></h3>
 <table>
-<tr><td><strong>Rotation (Pro)</strong></td><td>Switch tunnels and servers from a pool, manual or scheduled with jitter, grouped by provider</td></tr>
-<tr><td><strong>Network fingerprint</strong></td><td>Random WAN MAC, neutral DHCP identity, uniform TTL</td></tr>
-<tr><td><strong>Obfuscation (Pro)</strong></td><td>WireGuard over TLS/WebSocket on 443 to your own relay – looks like HTTPS</td></tr>
-<tr><td><strong>Mac client</strong></td><td>mpvpn-obfs: the WireGuard app on a Mac, tunnelled as HTTPS</td></tr>
-<tr><td><strong>No logs</strong></td><td>Logs and audit only in RAM, memory locked, no core dumps</td></tr>
+<tr><td><strong><span data-l="en">WireGuard + ML-KEM-1024</span><span data-l="de">WireGuard + ML-KEM-1024</span></strong></td><td><span data-l="en">Mullvad ephemeral peer, detected automatically – PQ depends on the provider</span><span data-l="de">Mullvad Ephemeral Peer, automatisch erkannt – PQ hängt vom Anbieter ab</span></td></tr>
+<tr><td><strong><span data-l="en">OpenVPN hybrid TLS</span><span data-l="de">OpenVPN hybrides TLS</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">X25519MLKEM768 offered in every handshake – used only if the provider's server supports it</span><span data-l="de">X25519MLKEM768 bei jedem Handshake angeboten – genutzt nur, wenn der Server des Anbieters es kann</span></td></tr>
+<tr><td><strong><span data-l="en">Backups</span><span data-l="de">Backups</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">age with post-quantum recipients</span><span data-l="de">age mit Post-Quanten-Empfängern</span></td></tr>
 </table>
-<h3>RAM-Disk Appliance (Pro)</h3>
+<p data-l="en" class="pqnote">Post-quantum always depends on the provider: MPVPN offers it on every uplink, but it is only used where the provider's server supports it – otherwise the tunnel stays classically encrypted. WireGuard: today Mullvad (ML-KEM-1024, automatic). OpenVPN: hybrid TLS (X25519MLKEM768) needs a server with OpenVPN 2.7 / OpenSSL 3.5, e.g. your own server or Cryptostorm. <a href="#providers">Providers at a glance</a></p><p data-l="de" class="pqnote">Post-Quanten hängt immer vom Anbieter ab: MPVPN bietet es auf jedem Uplink an, genutzt wird es aber nur, wenn der Server des Anbieters es unterstützt – sonst bleibt der Tunnel klassisch verschlüsselt. WireGuard: derzeit Mullvad (ML-KEM-1024, automatisch). OpenVPN: hybrides TLS (X25519MLKEM768) braucht einen Server mit OpenVPN 2.7 / OpenSSL 3.5, z. B. einen eigenen Server oder Cryptostorm. <a href="#providers">Anbieter auf einen Blick</a></p>
+<h3><span data-l="en">Privacy &amp; Fingerprint</span><span data-l="de">Privatsphäre &amp; Fingerprint</span></h3>
 <table>
-<tr><td><strong>Stateless</strong></td><td>Runs entirely from RAM, no swap, no disk writes</td></tr>
-<tr><td><strong>LUKS USB key</strong></td><td>Config on an encrypted stick, open only for seconds</td></tr>
-<tr><td><strong>Network vault</strong></td><td>Or an encrypted vault on a web server / KVM disk</td></tr>
-<tr><td><strong>Verified boot</strong></td><td>Signed hashes of kernel and initramfs checked before unlocking</td></tr>
-<tr><td><strong>Boot media</strong></td><td>ISO, USB, qcow2, PXE/iPXE from one build</td></tr>
+<tr><td><strong><span data-l="en">Rotation</span><span data-l="de">Rotation</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">Switch tunnels and servers from a pool, manual or scheduled with jitter, grouped by provider</span><span data-l="de">Tunnel und Server aus einem Pool wechseln, manuell oder nach Zeitplan mit Jitter, nach Anbieter gruppiert</span></td></tr>
+<tr><td><strong><span data-l="en">Network fingerprint</span><span data-l="de">Netz-Fingerprint</span></strong></td><td><span data-l="en">Random WAN MAC, neutral DHCP identity, uniform TTL</span><span data-l="de">Zufällige WAN-MAC, neutrale DHCP-Identität, einheitliche TTL</span></td></tr>
+<tr><td><strong><span data-l="en">No logs</span><span data-l="de">Keine Logs</span></strong></td><td><span data-l="en">Logs and audit only in RAM, memory locked, no core dumps</span><span data-l="de">Logs und Audit nur im RAM, Speicher gesperrt, keine Core-Dumps</span></td></tr>
 </table>
-<h3>Emergency (Pro)</h3>
+<h3><span data-l="en">RAM-Disk Appliance</span><span data-l="de">RAM-Disk-Appliance</span></h3>
 <table>
-<tr><td><strong>Panic button</strong></td><td>Dashboard, shell or knock: lock down or wipe</td></tr>
-<tr><td><strong>USB pull</strong></td><td>Removing the key ends the session</td></tr>
-<tr><td><strong>Duress passphrase</strong></td><td>Wipes instead of unlocking</td></tr>
-<tr><td><strong>Dead-man switch</strong></td><td>Wipe when you stop checking in</td></tr>
-<tr><td><strong>Paranoid mode</strong></td><td>Kept alive by knocks that look like failed IMAP/SMTP/DNS logins</td></tr>
+<tr><td><strong><span data-l="en">Stateless</span><span data-l="de">Zustandslos</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">Runs entirely from RAM, no swap, no disk writes</span><span data-l="de">Läuft komplett im RAM, kein Swap, keine Schreibzugriffe auf Platte</span></td></tr>
+<tr><td><strong><span data-l="en">LUKS USB key</span><span data-l="de">LUKS-USB-Stick</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">Config on an encrypted stick, open only for seconds</span><span data-l="de">Konfiguration auf einem verschlüsselten Stick, nur Sekunden geöffnet</span></td></tr>
+<tr><td><strong><span data-l="en">Network vault</span><span data-l="de">Netz-Vault</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">Or an encrypted vault on a web server / KVM disk</span><span data-l="de">Oder ein verschlüsselter Vault auf einem Webserver / einer KVM-Platte</span></td></tr>
+<tr><td><strong><span data-l="en">Verified boot</span><span data-l="de">Geprüfter Boot</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">Signed hashes of kernel and initramfs checked before unlocking</span><span data-l="de">Signierte Hashes von Kernel und Initramfs werden vor dem Entsperren geprüft</span></td></tr>
+<tr><td><strong><span data-l="en">Boot media</span><span data-l="de">Bootmedien</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">ISO, USB, qcow2, PXE/iPXE from one build</span><span data-l="de">ISO, USB, qcow2, PXE/iPXE aus einem Build</span></td></tr>
 </table>
-<h3>Administration (Pro)</h3>
+<h3><span data-l="en">Emergency</span><span data-l="de">Notfall</span></h3>
 <table>
-<tr><td><strong>Web interface</strong></td><td>HTTPS :8443, German and English</td></tr>
-<tr><td><strong>2FA</strong></td><td>TOTP and WebAuthn/passkeys</td></tr>
-<tr><td><strong>Live apply</strong></td><td>Immediate, with automatic rollback</td></tr>
-<tr><td><strong>Remote access</strong></td><td>Management WireGuard: admin UI/SSH from outside only through an own tunnel, QR per device</td></tr>
-<tr><td><strong>Shell</strong></td><td>Every setting via mpvpn-pro -get/-set or the config file</td></tr>
-<tr><td><strong>Signed updates</strong></td><td>Notice in UI/CLI/login, optional auto-update with rollback watchdog</td></tr>
-<tr><td><strong>Supply chain</strong></td><td>Reproducible builds, pinned dependencies, govulncheck, SBOM, offline root key</td></tr>
+<tr><td><strong><span data-l="en">Panic button</span><span data-l="de">Panikknopf</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">Dashboard, shell or knock: lock down or wipe</span><span data-l="de">Dashboard, Shell oder Klopfen: sperren oder löschen</span></td></tr>
+<tr><td><strong><span data-l="en">USB pull</span><span data-l="de">USB ziehen</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">Removing the key ends the session</span><span data-l="de">Stick abziehen beendet die Sitzung</span></td></tr>
+<tr><td><strong><span data-l="en">Duress passphrase</span><span data-l="de">Duress-Passwort</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">Wipes instead of unlocking</span><span data-l="de">Löscht statt zu entsperren</span></td></tr>
+<tr><td><strong><span data-l="en">Dead-man switch</span><span data-l="de">Dead-Man-Switch</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">Wipe when you stop checking in</span><span data-l="de">Löscht, wenn du dich nicht mehr meldest</span></td></tr>
+<tr><td><strong><span data-l="en">Paranoid mode</span><span data-l="de">Paranoid-Modus</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">Kept alive by knocks that look like failed IMAP/SMTP/DNS logins</span><span data-l="de">Am Leben gehalten durch Klopfzeichen, die wie fehlgeschlagene IMAP/SMTP/DNS-Logins aussehen</span></td></tr>
+</table>
+<h3><span data-l="en">Administration</span><span data-l="de">Administration</span></h3>
+<table>
+<tr><td><strong><span data-l="en">Web interface</span><span data-l="de">Webinterface</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">HTTPS :8443, German and English</span><span data-l="de">HTTPS :8443, Deutsch und Englisch</span></td></tr>
+<tr><td><strong><span data-l="en">2FA</span><span data-l="de">2FA</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">TOTP and WebAuthn/passkeys</span><span data-l="de">TOTP und WebAuthn/Passkeys</span></td></tr>
+<tr><td><strong><span data-l="en">Live apply</span><span data-l="de">Live-Übernahme</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">Immediate, with automatic rollback</span><span data-l="de">Sofort, mit automatischem Rollback</span></td></tr>
+<tr><td><strong><span data-l="en">Remote access</span><span data-l="de">Fernzugriff</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">Management WireGuard: admin UI/SSH from outside only through an own tunnel, QR per device</span><span data-l="de">Management-WireGuard: Admin-UI/SSH von außen nur durch einen eigenen Tunnel, QR pro Gerät</span></td></tr>
+<tr><td><strong><span data-l="en">Shell</span><span data-l="de">Shell</span></strong></td><td><span data-l="en">Every setting via mpvpn-pro -get/-set or the config file</span><span data-l="de">Jede Einstellung über mpvpn-pro -get/-set oder die Konfigurationsdatei</span></td></tr>
+<tr><td><strong><span data-l="en">Signed updates</span><span data-l="de">Signierte Updates</span></strong> <span class="pro">PRO</span></td><td><span data-l="en">Notice in UI/CLI/login, optional auto-update with rollback watchdog</span><span data-l="de">Hinweis in UI/CLI/Login, optional Auto-Update mit Rollback-Wächter</span></td></tr>
+<tr><td><strong><span data-l="en">Supply chain</span><span data-l="de">Lieferkette</span></strong></td><td><span data-l="en">Reproducible builds, pinned dependencies, govulncheck, SBOM, offline root key</span><span data-l="de">Reproduzierbare Builds, feste Abhängigkeiten, govulncheck, SBOM, Offline-Root-Schlüssel</span></td></tr>
 </table>
 
-<h2 id="editions">Editions</h2>
+<h2 id="providers"><span data-l="en">Providers at a glance</span><span data-l="de">Anbieter auf einen Blick</span></h2>
+<p data-l="en">Which provider offers which protocols and post-quantum – and what MPVPN can use of it. Post-quantum inside a provider's own app does not help a router or gateway: it only counts if the provider makes it usable without the app.</p><p data-l="de">Welcher Anbieter welche Protokolle und Post-Quanten bietet – und was MPVPN davon nutzen kann. Post-Quanten nur in der App des Anbieters hilft einem Router oder Gateway nicht: Es zählt nur, wenn der Anbieter es ohne App nutzbar macht.</p>
+<table class="prov"><tr><th><span data-l="en">Provider</span><span data-l="de">Anbieter</span></th><th><span data-l="en">Protocols</span><span data-l="de">Protokolle</span></th><th><span data-l="en">PQ at the provider</span><span data-l="de">PQ beim Anbieter</span></th><th><span data-l="en">PQ in MPVPN</span><span data-l="de">PQ in MPVPN</span></th><th><span data-l="en">In MPVPN</span><span data-l="de">In MPVPN</span></th></tr>
+<tr><td class="pname"><strong>Mullvad</strong></td><td data-en="Protocols" data-de="Protokolle"><span data-l="en">WireGuard (OpenVPN switched off since 15 Jan 2026)</span><span data-l="de">WireGuard (OpenVPN seit 15.01.2026 abgeschaltet)</span></td><td data-en="PQ at the provider" data-de="PQ beim Anbieter"><i class="pv pv-y" aria-hidden="true"></i> <span data-l="en">WireGuard: ML-KEM-1024 (+ HQC), usable without the app</span><span data-l="de">WireGuard: ML-KEM-1024 (+ HQC), ohne App nutzbar</span></td><td data-en="PQ in MPVPN" data-de="PQ in MPVPN"><i class="pv pv-y" aria-hidden="true"></i> <span data-l="en">yes, automatic</span><span data-l="de">ja, automatisch</span></td><td data-en="In MPVPN" data-de="In MPVPN"><span data-l="en">Assistant, multihop, SOCKS5 exits</span><span data-l="de">Assistent, Multihop, SOCKS5-Ausgänge</span></td></tr>
+<tr><td class="pname"><strong>NordVPN</strong></td><td data-en="Protocols" data-de="Protokolle"><span data-l="en">WireGuard (NordLynx), OpenVPN, IKEv2</span><span data-l="de">WireGuard (NordLynx), OpenVPN, IKEv2</span></td><td data-en="PQ at the provider" data-de="PQ beim Anbieter"><i class="pv pv-y" aria-hidden="true"></i> <span data-l="en">NordLynx: Kyber768 inside the tunnel, usable without the app (opt-in in the apps)</span><span data-l="de">NordLynx: Kyber768 im Tunnel, ohne App nutzbar (in den Apps zuschaltbar)</span></td><td data-en="PQ in MPVPN" data-de="PQ in MPVPN"><i class="pv pv-p" aria-hidden="true"></i> <span data-l="en">planned (reachable inside the tunnel)</span><span data-l="de">geplant (im Tunnel erreichbar)</span></td><td data-en="In MPVPN" data-de="In MPVPN"><span data-l="en">Assistant</span><span data-l="de">Assistent</span></td></tr>
+<tr><td class="pname"><strong>Surfshark</strong></td><td data-en="Protocols" data-de="Protokolle"><span data-l="en">WireGuard, OpenVPN, IKEv2</span><span data-l="de">WireGuard, OpenVPN, IKEv2</span></td><td data-en="PQ at the provider" data-de="PQ beim Anbieter"><i class="pv pv-a" aria-hidden="true"></i> <span data-l="en">WireGuard in the apps (default since Jan 2026)</span><span data-l="de">WireGuard in den Apps (Standard seit Jan. 2026)</span></td><td data-en="PQ in MPVPN" data-de="PQ in MPVPN"><i class="pv pv-n" aria-hidden="true"></i> <span data-l="en">no – app only</span><span data-l="de">nein – nur App</span></td><td data-en="In MPVPN" data-de="In MPVPN"><span data-l="en">Assistant / import</span><span data-l="de">Assistent / Import</span></td></tr>
+<tr><td class="pname"><strong>ExpressVPN</strong></td><td data-en="Protocols" data-de="Protokolle"><span data-l="en">Lightway, WireGuard, OpenVPN, IKEv2</span><span data-l="de">Lightway, WireGuard, OpenVPN, IKEv2</span></td><td data-en="PQ at the provider" data-de="PQ beim Anbieter"><i class="pv pv-a" aria-hidden="true"></i> <span data-l="en">Lightway (ML-KEM), WireGuard via app login service</span><span data-l="de">Lightway (ML-KEM), WireGuard über App-Anmeldedienst</span></td><td data-en="PQ in MPVPN" data-de="PQ in MPVPN"><i class="pv pv-n" aria-hidden="true"></i> <span data-l="en">no – app only</span><span data-l="de">nein – nur App</span></td><td data-en="In MPVPN" data-de="In MPVPN"><span data-l="en">Guided import (OpenVPN)</span><span data-l="de">Geführter Import (OpenVPN)</span></td></tr>
+<tr><td class="pname"><strong>Windscribe</strong></td><td data-en="Protocols" data-de="Protokolle"><span data-l="en">WireGuard, OpenVPN, IKEv2, Stealth</span><span data-l="de">WireGuard, OpenVPN, IKEv2, Stealth</span></td><td data-en="PQ at the provider" data-de="PQ beim Anbieter"><i class="pv pv-a" aria-hidden="true"></i> <span data-l="en">WireGuard PSK via ML-KEM TLS, at app login (since Oct 2025)</span><span data-l="de">WireGuard-PSK über ML-KEM-TLS beim App-Login (seit Okt. 2025)</span></td><td data-en="PQ in MPVPN" data-de="PQ in MPVPN"><i class="pv pv-p" aria-hidden="true"></i> <span data-l="en">planned</span><span data-l="de">geplant</span></td><td data-en="In MPVPN" data-de="In MPVPN"><span data-l="en">Guided import</span><span data-l="de">Geführter Import</span></td></tr>
+<tr><td class="pname"><strong>IVPN</strong></td><td data-en="Protocols" data-de="Protokolle"><span data-l="en">WireGuard, OpenVPN</span><span data-l="de">WireGuard, OpenVPN</span></td><td data-en="PQ at the provider" data-de="PQ beim Anbieter"><i class="pv pv-y" aria-hidden="true"></i> <span data-l="en">Kyber-1024 (+ McEliece) at key upload via the account API – without the app, needs the account ID</span><span data-l="de">Kyber-1024 (+ McEliece) beim Schlüssel-Upload über die Konto-API – ohne App, braucht die Konto-ID</span></td><td data-en="PQ in MPVPN" data-de="PQ in MPVPN"><i class="pv pv-p" aria-hidden="true"></i> <span data-l="en">planned (optional)</span><span data-l="de">geplant (optional)</span></td><td data-en="In MPVPN" data-de="In MPVPN"><span data-l="en">Assistant</span><span data-l="de">Assistent</span></td></tr>
+<tr><td class="pname"><strong>Cryptostorm</strong></td><td data-en="Protocols" data-de="Protokolle"><span data-l="en">OpenVPN, WireGuard</span><span data-l="de">OpenVPN, WireGuard</span></td><td data-en="PQ at the provider" data-de="PQ beim Anbieter"><i class="pv pv-y" aria-hidden="true"></i> <span data-l="en">OpenVPN: X25519MLKEM768 (OpenVPN 2.7 / OpenSSL 3.5)</span><span data-l="de">OpenVPN: X25519MLKEM768 (OpenVPN 2.7 / OpenSSL 3.5)</span></td><td data-en="PQ in MPVPN" data-de="PQ in MPVPN"><i class="pv pv-p" aria-hidden="true"></i> <span data-l="en">expected – MPVPN offers it, not yet tested live</span><span data-l="de">voraussichtlich – MPVPN bietet es an, noch nicht live getestet</span></td><td data-en="In MPVPN" data-de="In MPVPN"><span data-l="en">Import (.ovpn)</span><span data-l="de">Import (.ovpn)</span></td></tr>
+<tr><td class="pname"><strong>Proton VPN</strong></td><td data-en="Protocols" data-de="Protokolle"><span data-l="en">WireGuard, OpenVPN, IKEv2, Stealth (app)</span><span data-l="de">WireGuard, OpenVPN, IKEv2, Stealth (App)</span></td><td data-en="PQ at the provider" data-de="PQ beim Anbieter"><i class="pv pv-n" aria-hidden="true"></i> <span data-l="en">not yet – groundwork announced</span><span data-l="de">noch nicht – Grundlage angekündigt</span></td><td data-en="PQ in MPVPN" data-de="PQ in MPVPN"><i class="pv pv-n" aria-hidden="true"></i> <span data-l="en">no</span><span data-l="de">nein</span></td><td data-en="In MPVPN" data-de="In MPVPN"><span data-l="en">Guided import</span><span data-l="de">Geführter Import</span></td></tr>
+<tr><td class="pname"><strong>Private Internet Access</strong></td><td data-en="Protocols" data-de="Protokolle"><span data-l="en">WireGuard, OpenVPN</span><span data-l="de">WireGuard, OpenVPN</span></td><td data-en="PQ at the provider" data-de="PQ beim Anbieter"><i class="pv pv-n" aria-hidden="true"></i> <span data-l="en">not yet</span><span data-l="de">noch nicht</span></td><td data-en="PQ in MPVPN" data-de="PQ in MPVPN"><i class="pv pv-n" aria-hidden="true"></i> <span data-l="en">no</span><span data-l="de">nein</span></td><td data-en="In MPVPN" data-de="In MPVPN"><span data-l="en">Assistant, keys renewed automatically</span><span data-l="de">Assistent, Schlüssel automatisch erneuert</span></td></tr>
+<tr><td class="pname"><strong>PureVPN</strong></td><td data-en="Protocols" data-de="Protokolle"><span data-l="en">WireGuard, OpenVPN, IKEv2</span><span data-l="de">WireGuard, OpenVPN, IKEv2</span></td><td data-en="PQ at the provider" data-de="PQ beim Anbieter"><i class="pv pv-n" aria-hidden="true"></i> <span data-l="en">only 'quantum-resistant' OpenVPN keys in 6 countries – no PQ key exchange</span><span data-l="de">nur „quantenresistente“ OpenVPN-Schlüssel in 6 Ländern – kein PQ-Schlüsseltausch</span></td><td data-en="PQ in MPVPN" data-de="PQ in MPVPN"><i class="pv pv-n" aria-hidden="true"></i> <span data-l="en">no</span><span data-l="de">nein</span></td><td data-en="In MPVPN" data-de="In MPVPN"><span data-l="en">Guided import</span><span data-l="de">Geführter Import</span></td></tr>
+<tr><td class="pname"><strong>AzireVPN</strong></td><td data-en="Protocols" data-de="Protokolle"><span data-l="en">WireGuard</span><span data-l="de">WireGuard</span></td><td data-en="PQ at the provider" data-de="PQ beim Anbieter"><i class="pv pv-n" aria-hidden="true"></i> <span data-l="en">none known</span><span data-l="de">nicht bekannt</span></td><td data-en="PQ in MPVPN" data-de="PQ in MPVPN"><i class="pv pv-n" aria-hidden="true"></i> <span data-l="en">no</span><span data-l="de">nein</span></td><td data-en="In MPVPN" data-de="In MPVPN"><span data-l="en">Assistant</span><span data-l="de">Assistent</span></td></tr>
+<tr><td class="pname"><strong>AdGuard VPN</strong></td><td data-en="Protocols" data-de="Protokolle"><span data-l="en">AdGuard protocol (app), IKEv2 for routers</span><span data-l="de">AdGuard-Protokoll (App), IKEv2 für Router</span></td><td data-en="PQ at the provider" data-de="PQ beim Anbieter"><i class="pv pv-n" aria-hidden="true"></i> <span data-l="en">none known</span><span data-l="de">nicht bekannt</span></td><td data-en="PQ in MPVPN" data-de="PQ in MPVPN"><i class="pv pv-n" aria-hidden="true"></i> <span data-l="en">no</span><span data-l="de">nein</span></td><td data-en="In MPVPN" data-de="In MPVPN"><span data-l="en">IPsec/IKEv2 uplink</span><span data-l="de">IPsec/IKEv2-Uplink</span></td></tr>
+<tr><td class="pname"><strong><span data-l="en">Own server / VPS</span><span data-l="de">Eigener Server / VPS</span></strong></td><td data-en="Protocols" data-de="Protokolle"><span data-l="en">WireGuard, OpenVPN, AmneziaWG</span><span data-l="de">WireGuard, OpenVPN, AmneziaWG</span></td><td data-en="PQ at the provider" data-de="PQ beim Anbieter"><i class="pv pv-y" aria-hidden="true"></i> <span data-l="en">OpenVPN 2.7 hybrid TLS; WireGuard PSK service planned</span><span data-l="de">OpenVPN 2.7 hybrides TLS; WireGuard-PSK-Dienst geplant</span></td><td data-en="PQ in MPVPN" data-de="PQ in MPVPN"><i class="pv pv-y" aria-hidden="true"></i> <span data-l="en">OpenVPN: yes (tested live) · WireGuard: planned</span><span data-l="de">OpenVPN: ja (live getestet) · WireGuard: geplant</span></td><td data-en="In MPVPN" data-de="In MPVPN"><span data-l="en">Import, own configs</span><span data-l="de">Import, eigene Configs</span></td></tr></table><p data-l="en" class="legend"><i class="pv pv-y"></i> yes &nbsp; <i class="pv pv-a"></i> only in the provider's app &nbsp; <i class="pv pv-p"></i> planned / expected &nbsp; <i class="pv pv-n"></i> no</p><p data-l="de" class="legend"><i class="pv pv-y"></i> ja &nbsp; <i class="pv pv-a"></i> nur in der App des Anbieters &nbsp; <i class="pv pv-p"></i> geplant / voraussichtlich &nbsp; <i class="pv pv-n"></i> nein</p>
+<p data-l="en" class="src">As of 16 Nov 2026, based on the providers' own statements; providers change this often.</p><p data-l="de" class="src">Stand 16.11.2026, nach Angaben der Anbieter; Anbieter ändern das oft.</p>
+
+<h2 id="editions"><span data-l="en">Editions</span><span data-l="de">Editionen</span></h2>
 <div class="editions">
 <div class="edition">
 <h4>Community</h4>
-<div class="price">Free</div>
-<p style="color:#64748b;font-size:.85rem">VPN core, unlimited tunnels</p>
+<div class="price"><span data-l="en">Free</span><span data-l="de">Kostenlos</span></div>
+<p data-l="en">VPN core, unlimited tunnels</p><p data-l="de">VPN-Kern, unbegrenzt viele Tunnel</p>
 <ul>
-<li>WireGuard multipath, all strategies</li>
-<li>Rules, split DNS, lists</li>
-<li>Kill switch, DNS/IPv6 leak protection</li>
-<li>Post-quantum WireGuard (Mullvad)</li>
-<li>Network fingerprint, config vault</li>
-<li>Shell configuration</li>
-<li class="no">No web interface</li>
-<li class="no">No OpenVPN, RAM-disk, obfuscation</li>
+<li><span data-l="en">WireGuard multipath, all strategies</span><span data-l="de">WireGuard-Multipath, alle Strategien</span></li>
+<li><span data-l="en">Rules, split DNS, lists</span><span data-l="de">Regeln, Split-DNS, Listen</span></li>
+<li><span data-l="en">Kill switch, DNS/IPv6 leak protection</span><span data-l="de">Kill-Switch, DNS-/IPv6-Leak-Schutz</span></li>
+<li><span data-l="en">Post-quantum WireGuard¹ (Mullvad)</span><span data-l="de">Post-Quanten-WireGuard¹ (Mullvad)</span></li>
+<li><span data-l="en">Network fingerprint, config vault</span><span data-l="de">Netz-Fingerprint, Config-Vault</span></li>
+<li><span data-l="en">Shell configuration</span><span data-l="de">Shell-Konfiguration</span></li>
+<li class="no"><span data-l="en">No web interface, no provider assistant</span><span data-l="de">Kein Webinterface, kein Anbieter-Assistent</span></li>
+<li class="no"><span data-l="en">No OpenVPN, IPsec, AmneziaWG, SOCKS5</span><span data-l="de">Kein OpenVPN, IPsec, AmneziaWG, SOCKS5</span></li>
+<li class="no"><span data-l="en">No obfuscation, transport fallback, RAM-disk</span><span data-l="de">Keine Tarnung, kein Transport-Fallback, keine RAM-Disk</span></li>
 </ul>
 </div>
-<div class="edition pro">
+<div class="edition pro-ed">
+<span class="rec"><span data-l="en">Recommended</span><span data-l="de">Empfohlen</span></span>
 <h4>Pro</h4>
 <div class="price">TBA</div>
-<p style="color:#64748b;font-size:.85rem">Pricing announced at launch</p>
+<p data-l="en">Pricing announced at launch</p><p data-l="de">Preise zum Start</p>
 <ul>
-<li>Everything in Community</li>
-<li>Web interface with 2FA, live apply</li>
-<li>OpenVPN uplinks (post-quantum TLS)</li>
-<li>IPsec/IKEv2 uplinks (e.g. AdGuard VPN)</li>
-<li>AmneziaWG uplinks (AWG 1.0/2.0/3, against DPI blocking)</li>
-<li>Transport fallback (Shadowsocks, SOCKS5, HTTPS) and SOCKS5 uplinks</li>
-<li>RAM-disk appliance + emergency functions</li>
-<li>Obfuscation + Mac client</li>
-<li>Rotation</li>
-<li>Remote access via management WireGuard</li>
-<li>VLANs with own tunnels, DHCP, admin VLAN, isolation</li>
-<li>Network page: devices, gateway star, VLAN editor</li>
-<li>Provider assistant (NordVPN, PIA, Mullvad, IVPN, AzireVPN, Surfshark + import for Proton, Windscribe, ExpressVPN, PureVPN)</li>
-<li>Signed updates, backups</li>
+<li><span data-l="en">Everything in Community</span><span data-l="de">Alles aus Community</span></li>
+<li><span data-l="en">Web interface with 2FA, live apply</span><span data-l="de">Webinterface mit 2FA, Live-Übernahme</span></li>
+<li><span data-l="en">Provider assistant (NordVPN, PIA, Mullvad, IVPN, AzireVPN, Surfshark + import for Proton, Windscribe, ExpressVPN, PureVPN)</span><span data-l="de">Anbieter-Assistent (NordVPN, PIA, Mullvad, IVPN, AzireVPN, Surfshark + Import für Proton, Windscribe, ExpressVPN, PureVPN)</span></li>
+<li><span data-l="en">OpenVPN uplinks (post-quantum TLS¹)</span><span data-l="de">OpenVPN-Uplinks (Post-Quanten-TLS¹)</span></li>
+<li><span data-l="en">IPsec/IKEv2 uplinks (e.g. AdGuard VPN)</span><span data-l="de">IPsec/IKEv2-Uplinks (z. B. AdGuard VPN)</span></li>
+<li><span data-l="en">AmneziaWG uplinks (AWG 1.0/2.0/3, against DPI blocking)</span><span data-l="de">AmneziaWG-Uplinks (AWG 1.0/2.0/3, gegen DPI-Sperren)</span></li>
+<li><span data-l="en">Transport fallback (Shadowsocks, SOCKS5, HTTPS) and SOCKS5 uplinks</span><span data-l="de">Transport-Fallback (Shadowsocks, SOCKS5, HTTPS) und SOCKS5-Uplinks</span></li>
+<li><span data-l="en">Obfuscation + Mac client</span><span data-l="de">Tarnung + Mac-Client</span></li>
+<li><span data-l="en">RAM-disk appliance + emergency functions</span><span data-l="de">RAM-Disk-Appliance + Notfallfunktionen</span></li>
+<li><span data-l="en">VLANs with own tunnels, DHCP, admin VLAN, isolation</span><span data-l="de">VLANs mit eigenen Tunneln, DHCP, Admin-VLAN, Isolation</span></li>
+<li><span data-l="en">Network page: devices, gateway star, VLAN editor</span><span data-l="de">Netzwerkseite: Geräte, Gateway-Stern, VLAN-Editor</span></li>
+<li><span data-l="en">Rotation, Mullvad multihop and SOCKS5 exits</span><span data-l="de">Rotation, Mullvad-Multihop und SOCKS5-Ausgänge</span></li>
+<li><span data-l="en">Remote access via management WireGuard</span><span data-l="de">Fernzugriff über Management-WireGuard</span></li>
+<li><span data-l="en">Signed updates, post-quantum backups</span><span data-l="de">Signierte Updates, Post-Quanten-Backups</span></li>
 </ul>
 </div>
 </div>
-<p>The number of tunnels is never limited. A license is bound to one device and can be moved.</p>
-<p style="color:#64748b;font-size:.85rem">Privacy-respecting licensing: the periodic check sends only a machine ID and the program's own checksum – never your traffic, DNS or browsing. Every release is reproducible and signed, so the checksum can be verified against the public release.</p>
+<p data-l="en">The number of tunnels is never limited. A license is bound to one device and can be moved.</p><p data-l="de">Die Zahl der Tunnel ist nie begrenzt. Eine Lizenz gilt für ein Gerät und lässt sich umziehen.</p>
+<p style="color:#64748b;font-size:.85rem"><span data-l="en">Privacy-respecting licensing: the periodic check sends only a machine ID and the program's own checksum – never your traffic, DNS or browsing. Every release is reproducible and signed, so the checksum can be verified against the public release.</span><span data-l="de">Datensparsame Lizenzierung: Die regelmäßige Prüfung sendet nur eine Geräte-ID und die Prüfsumme des Programms – nie deinen Verkehr, DNS oder Verlauf. Jedes Release ist reproduzierbar und signiert, die Prüfsumme lässt sich also gegen das öffentliche Release prüfen.</span></p>
 
-<h2>Architecture</h2>
-<figure>
-<img src="docs/architecture.png" alt="MPVPN Architecture">
-</figure>
-<pre>LAN client ─▶ TUN ─▶ netstack ─▶ DNS ─▶ Rules ─▶ Balancer
-     ├─▶ WireGuard uplink (PQ: ML-KEM-1024)
-     ├─▶ WireGuard uplink (obfuscated: WSS/443)
-     └─▶ OpenVPN uplink   (PQ: X25519MLKEM768)   … any number
-Kill switch (nftables): nothing leaves outside a tunnel</pre>
+<h2 id="architecture"><span data-l="en">Architecture</span><span data-l="de">Architektur</span></h2>
+<div class="arch">
+<div class="flow"><h4>1. <span data-l="en">Core path</span><span data-l="de">Datenpfad</span></h4><div class="row"><div class="n hl"><b><span data-l="en">Client</span><span data-l="de">Client</span></b></div><i class="ar" aria-hidden="true"></i><div class="n "><b><span data-l="en">TUN</span><span data-l="de">TUN</span></b></div><i class="ar" aria-hidden="true"></i><div class="n "><b><span data-l="en">gVisor netstack</span><span data-l="de">gVisor netstack</span></b><small><span data-l="en">DNS cache, split DNS</span><span data-l="de">DNS-Cache, Split-DNS</span></small></div><i class="ar" aria-hidden="true"></i><div class="n "><b><span data-l="en">Rules</span><span data-l="de">Regeln</span></b><small><span data-l="en">domain, IP, port, client, VLAN</span><span data-l="de">Domain, IP, Port, Client, VLAN</span></small></div><i class="ar" aria-hidden="true"></i><div class="n "><b><span data-l="en">Balancer</span><span data-l="de">Balancer</span></b><small><span data-l="en">6 strategies</span><span data-l="de">6 Strategien</span></small></div><i class="ar" aria-hidden="true"></i><div class="n stack"><b><span data-l="en">Uplinks</span><span data-l="de">Uplinks</span></b><span class="u">WireGuard <em>PQ¹</em></span><span class="u">OpenVPN <em>PQ¹</em> <span class="pro">PRO</span></span><span class="u">IPsec/IKEv2 <span class="pro">PRO</span></span><span class="u">AmneziaWG <span class="pro">PRO</span></span><span class="u">SOCKS5 <span class="pro">PRO</span></span><small><span data-l="en">Health probe (RTT, handshake), failover</span><span data-l="de">Health-Check (RTT, Handshake), Failover</span></small></div></div><p class="fnote"><span data-l="en">Kill switch (nftables): nothing leaves outside a tunnel. ¹ Post-quantum depends on the provider.</span><span data-l="de">Kill-Switch (nftables): nichts verlässt das Netz außerhalb eines Tunnels. ¹ Post-Quanten hängt vom Anbieter ab.</span></p></div>
+<div class="flow"><h4>2. <span data-l="en">Admin UI <span class="pro">PRO</span></span><span data-l="de">Admin-Oberfläche <span class="pro">PRO</span></span></h4><div class="row"><div class="n hl"><b><span data-l="en">Admin UI</span><span data-l="de">Admin-UI</span></b><small><span data-l="en">:8443, 2FA / passkeys</span><span data-l="de">:8443, 2FA / Passkeys</span></small></div><i class="ar" aria-hidden="true"></i><div class="n "><b><span data-l="en">API</span><span data-l="de">API</span></b><small><span data-l="en">or shell: <span style="white-space:nowrap">mpvpn-pro -set</span></span><span data-l="de">oder Shell: <span style="white-space:nowrap">mpvpn-pro -set</span></span></small></div><i class="ar" aria-hidden="true"></i><div class="n "><b><span data-l="en">SQLite</span><span data-l="de">SQLite</span></b><small><span data-l="en">config + audit</span><span data-l="de">Konfiguration + Audit</span></small></div><i class="ar" aria-hidden="true"></i><div class="n "><b><span data-l="en">Live apply</span><span data-l="de">Live-Übernahme</span></b><small><span data-l="en">automatic rollback</span><span data-l="de">automatischer Rollback</span></small></div><i class="ar" aria-hidden="true"></i><div class="n "><b><span data-l="en">Rules engine & uplinks</span><span data-l="de">Regeln & Uplinks</span></b><small><span data-l="en">no restart</span><span data-l="de">ohne Neustart</span></small></div></div></div>
+<div class="flow"><h4>3. <span data-l="en">RAM-disk flow <span class="pro">PRO</span></span><span data-l="de">RAM-Disk-Ablauf <span class="pro">PRO</span></span></h4><div class="row"><div class="n hl"><b><span data-l="en">Boot</span><span data-l="de">Boot</span></b><small><span data-l="en">ISO, USB, qcow2, PXE</span><span data-l="de">ISO, USB, qcow2, PXE</span></small></div><i class="ar" aria-hidden="true"></i><div class="n "><b><span data-l="en">Verify image</span><span data-l="de">Image prüfen</span></b><small><span data-l="en">signed hashes (Ed25519)</span><span data-l="de">signierte Hashes (Ed25519)</span></small></div><i class="ar" aria-hidden="true"></i><div class="n "><b><span data-l="en">LUKS USB</span><span data-l="de">LUKS-USB</span></b><small><span data-l="en">or network vault</span><span data-l="de">oder Netz-Vault</span></small></div><i class="ar" aria-hidden="true"></i><div class="n "><b><span data-l="en">Duress check</span><span data-l="de">Duress-Prüfung</span></b><small><span data-l="en">wipe instead of unlock</span><span data-l="de">löschen statt entsperren</span></small></div><i class="ar" aria-hidden="true"></i><div class="n "><b><span data-l="en">XChaCha20 vault</span><span data-l="de">XChaCha20-Vault</span></b></div><i class="ar" aria-hidden="true"></i></div><div class="row r2"><i class="cont" aria-hidden="true">↳</i><div class="n "><b><span data-l="en">RAM</span><span data-l="de">RAM</span></b><small><span data-l="en">/run, no swap</span><span data-l="de">/run, kein Swap</span></small></div><i class="ar" aria-hidden="true"></i><div class="n "><b><span data-l="en">Fingerprint</span><span data-l="de">Fingerprint</span></b><small><span data-l="en">random MAC before DHCP</span><span data-l="de">Zufalls-MAC vor DHCP</span></small></div><i class="ar" aria-hidden="true"></i><div class="n "><b><span data-l="en">Run</span><span data-l="de">Betrieb</span></b><small><span data-l="en">license gate</span><span data-l="de">Lizenz-Gate</span></small></div><i class="ar" aria-hidden="true"></i><div class="n "><b><span data-l="en">Re-encrypt</span><span data-l="de">Neu verschlüsseln</span></b><small><span data-l="en">back to the key</span><span data-l="de">zurück auf den Stick</span></small></div></div></div>
+<div class="flow"><h4>4. <span data-l="en">Obfuscation & censorship <span class="pro">PRO</span></span><span data-l="de">Tarnung & Zensur-Umgehung <span class="pro">PRO</span></span></h4><div class="row"><div class="n hl"><b><span data-l="en">Client / Mac</span><span data-l="de">Client / Mac</span></b></div><i class="ar" aria-hidden="true"></i><div class="n "><b><span data-l="en">WSS/TLS :443</span><span data-l="de">WSS/TLS :443</span></b></div><i class="ar" aria-hidden="true"></i><div class="n "><b><span data-l="en">Looks like HTTPS</span><span data-l="de">Sieht aus wie HTTPS</span></b></div><i class="ar" aria-hidden="true"></i><div class="n "><b><span data-l="en">Relay</span><span data-l="de">Relay</span></b><small><span data-l="en">your VPS</span><span data-l="de">dein VPS</span></small></div><i class="ar" aria-hidden="true"></i><div class="n "><b><span data-l="en">WireGuard</span><span data-l="de">WireGuard</span></b></div></div><p class="fnote"><span data-l="en">Uplink side: AmneziaWG against DPI, transport fallback Shadowsocks → SOCKS5 → HTTPS when WireGuard is blocked – switches automatically and returns.</span><span data-l="de">Uplink-Seite: AmneziaWG gegen DPI, Transport-Fallback Shadowsocks → SOCKS5 → HTTPS, wenn WireGuard gesperrt ist – schaltet automatisch um und zurück.</span></p></div>
+<div class="flow"><h4>5. <span data-l="en">Emergency <span class="pro">PRO</span></span><span data-l="de">Notfall <span class="pro">PRO</span></span></h4><div class="row"><div class="n warn"><b><span data-l="en">Trigger</span><span data-l="de">Auslöser</span></b><small><span data-l="en">panic button, USB pull, duress, dead-man, knock</span><span data-l="de">Panikknopf, USB ziehen, Duress, Dead-Man, Klopfen</span></small></div><i class="ar" aria-hidden="true"></i><div class="n "><b><span data-l="en">Wipe RAM secrets</span><span data-l="de">RAM-Geheimnisse löschen</span></b></div><i class="ar" aria-hidden="true"></i><div class="n "><b><span data-l="en">Close LUKS</span><span data-l="de">LUKS schließen</span></b></div><i class="ar" aria-hidden="true"></i><div class="n "><b><span data-l="en">Lock down or power off</span><span data-l="de">Sperren oder ausschalten</span></b></div></div></div>
+</div>
+<p data-l="en" class="pqnote">Post-quantum always depends on the provider: MPVPN offers it on every uplink, but it is only used where the provider's server supports it – otherwise the tunnel stays classically encrypted. WireGuard: today Mullvad (ML-KEM-1024, automatic). OpenVPN: hybrid TLS (X25519MLKEM768) needs a server with OpenVPN 2.7 / OpenSSL 3.5, e.g. your own server or Cryptostorm. <a href="#providers">Providers at a glance</a></p><p data-l="de" class="pqnote">Post-Quanten hängt immer vom Anbieter ab: MPVPN bietet es auf jedem Uplink an, genutzt wird es aber nur, wenn der Server des Anbieters es unterstützt – sonst bleibt der Tunnel klassisch verschlüsselt. WireGuard: derzeit Mullvad (ML-KEM-1024, automatisch). OpenVPN: hybrides TLS (X25519MLKEM768) braucht einen Server mit OpenVPN 2.7 / OpenSSL 3.5, z. B. einen eigenen Server oder Cryptostorm. <a href="#providers">Anbieter auf einen Blick</a></p>
 
-<h2>Platforms</h2>
+<h2><span data-l="en">Platforms</span><span data-l="de">Plattformen</span></h2>
 <table>
-<tr><td>Alpine Linux</td><td>reference platform (OpenRC)</td></tr>
-<tr><td>RAM-disk image</td><td>Alpine-based, x86_64</td></tr>
-<tr><td>Debian 13, Ubuntu 24.04, Alma/Rocky 10</td><td>tested, mpvpn-hostcheck adjusts the host</td></tr>
-<tr><td>Requirements</td><td>/dev/net/tun, nftables, iproute2 – 1 vCPU, 512 MB RAM</td></tr>
+<tr><td>Alpine Linux</td><td><span data-l="en">reference platform (OpenRC)</span><span data-l="de">Referenzplattform (OpenRC)</span></td></tr>
+<tr><td><span data-l="en">RAM-disk image</span><span data-l="de">RAM-Disk-Image</span> <span class="pro">PRO</span></td><td><span data-l="en">Alpine-based, x86_64</span><span data-l="de">Alpine-basiert, x86_64</span></td></tr>
+<tr><td>Debian 13, Ubuntu 24.04, Alma/Rocky 10</td><td><span data-l="en">tested, mpvpn-hostcheck adjusts the host</span><span data-l="de">getestet, mpvpn-hostcheck passt den Host an</span></td></tr>
+<tr><td><span data-l="en">Requirements</span><span data-l="de">Voraussetzungen</span></td><td><span data-l="en">/dev/net/tun, nftables, iproute2 – 1 vCPU, 512 MB RAM</span><span data-l="de">/dev/net/tun, nftables, iproute2 – 1 vCPU, 512 MB RAM</span></td></tr>
 </table>
 
-<h2>Coming Next</h2>
-<p>Censorship-resistant transports (Hysteria2, VLESS + Reality, Shadowsocks-2022, CDN fronting), AmneziaWG, post-quantum for more providers, a post-quantum PSK service on your own VPS.</p>
+<h2><span data-l="en">Coming Next</span><span data-l="de">Als Nächstes</span></h2>
+<p data-l="en">Censorship-resistant transports (Hysteria2, VLESS + Reality, Shadowsocks-2022, CDN fronting), post-quantum for more providers (NordVPN, IVPN, Windscribe), a post-quantum PSK service on your own VPS.</p><p data-l="de">Zensurfeste Transporte (Hysteria2, VLESS + Reality, Shadowsocks-2022, CDN-Fronting), Post-Quanten für weitere Anbieter (NordVPN, IVPN, Windscribe), ein Post-Quanten-PSK-Dienst auf deinem eigenen VPS.</p>
 
 </div>
 
 <footer>
-<p>&copy; 2026 MPVPN &bull; Self-hosted. Multipath. Privacy-first.</p>
+<p>&copy; 2026 MPVPN &bull; <span data-l="en">Self-hosted. Multipath. Privacy-first.</span><span data-l="de">Selbst betrieben. Multipath. Privatsphäre zuerst.</span></p>
 <p style="margin-top:.5rem"><a href="https://mpvpn.dev">mpvpn.dev</a> &bull; <a href="https://github.com/KevinGandalf/mpvpn-preview/releases">Releases</a></p>
 </footer>
 
