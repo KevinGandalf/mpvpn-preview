@@ -62,7 +62,7 @@ the program and the image check it.
 | **VLANs** (Pro) | 802.1Q VLANs, each with its own tunnels (e.g. VLAN 10 → NordVPN, VLAN 20 → Mullvad; dropped, not rerouted, when they are down), DNS through the same tunnels, own DHCP server, admin-only VLANs, isolation |
 | **Split DNS** | templates for streaming, banking, LAN names; DNS cache with IP→name mapping |
 | **Lists** | ready-made domain/IP lists, refreshed automatically |
-| **Provider assistant** (Pro) | log in at NordVPN, PIA, Mullvad, IVPN, AzireVPN or Surfshark, pick country, city, protocol (WireGuard, OpenVPN, IPsec/IKEv2) and servers – uplinks are created, PIA keys renewed automatically; guided import for Proton, Windscribe, ExpressVPN, PureVPN |
+| **Provider assistant** (Pro) | log in at NordVPN, PIA, Mullvad, IVPN, AzireVPN, AirVPN or Surfshark, pick country, city, protocol (WireGuard, OpenVPN, IPsec/IKEv2) and servers – uplinks are created, PIA keys renewed automatically; guided import for Proton, Windscribe, ExpressVPN, PureVPN |
 | **Import** | `.conf` (WireGuard) and `.ovpn` (OpenVPN) files from your provider |
 | **Gateway mode** | MPVPN as default gateway with its own DHCP server, or next to your router |
 
@@ -148,10 +148,10 @@ Post-quantum that exists only inside a provider's app does not help a router or 
 | Surfshark | WireGuard, OpenVPN, IKEv2 | WireGuard, app only | – |
 | ExpressVPN | Lightway, WireGuard, OpenVPN, IKEv2 | Lightway / WireGuard, app only | – |
 | Windscribe | WireGuard, OpenVPN, IKEv2, Stealth | WireGuard PSK at app login | planned |
-| Proton VPN, PIA, AzireVPN, AdGuard VPN | various | not yet / none known | – |
+| Proton VPN, PIA, AzireVPN, AirVPN, AdGuard VPN | various | not yet / none known | – |
 | PureVPN | WireGuard, OpenVPN, IKEv2 | "quantum-resistant" OpenVPN keys only, no PQ key exchange | – |
 
-As of 16 Nov 2026, based on the providers' own statements.
+As of 17 Nov 2026, based on the providers' own statements.
 
 ## Editions
 
